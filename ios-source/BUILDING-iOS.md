@@ -1,39 +1,39 @@
 # Build GameRemote for iPhone and iPad from this source package
 
-This **r4 corresponding-source candidate** targets version **1.10.0, build 3**. It contains an iOS-only source selection, the shared protocol core, four expanded vendor trees and five unchanged upstream source archives. It contains no Git history, certificate/private-key material, profile or application binary. The retained upstream archives contain public cryptographic test fixtures; those are upstream source data, not publisher credentials.
+This **r5 corresponding-source candidate** targets version **1.10.0, build 4**. It contains the iOS frontend, shared protocol core, four expanded vendor trees, five exact upstream source archives and retained licence notices. It has no Git database, application binary or publisher signing material.
 
-The original development helpers still default to build 2. The from-source commands below explicitly request build 3 and remain available for a fresh build. The actual publisher Build3 candidate reused the previously verified Build2 native code and assets, applied the reviewed metadata/privacy-resource updates, and was signed locally. No new CI/native build or key export was used for that candidate. SOURCE-MANIFEST.json records the exact delivered source; the frozen packaging source commit is `5c1df97059d541c6fc1295abbabd51a415980e26`. This package contains no repository history.
+Build4 changes production code: `lib/src/rpcrypt.c` reserves all 32 HMAC-SHA256 output bytes before copying the 16-byte protocol IV. Native commit `d2a49d168aa22aa1d0bd050f146edb6582d9b961` also updates the host sanitizer harness and crypto documentation and adds the 19-line unsigned device workflow. The release coordinator reports 9 real Remote Play vectors and 5 registration tests passed ASan/UBSan. The separately documented full-suite sanitizer run remains blocked by the existing MUnit zero-bound parameter issue; the focused result is not a full-suite pass. These tests were not rerun during source packaging.
 
-## Actual publisher Build3 route: verified artifact reuse and local signing
+Build3 was uploaded but held after the HMAC buffer defect. Its earlier receipts, README, building guide and source delta are retained under provenance/ as historical records. Their native-code reuse statements describe Build3 only. Build4 requires and uses a new native build.
 
-The existing local verification report identifies `GameRemote-1.10.0-build3.ipa` with SHA-256 `4d390f97d09195312b4989de84d73dcea5934b7d880dd4b38310c11787c95104`. Its native code came from commit `7e9e397e07f677282beb1af76448d587f79f300e`; reviewed metadata/privacy-resource inputs came from `432b5e8f72e42c0b47f6568f8a9560e4d0b678e9`. Independent source review approved reuse because compiled code, assets and dependency inputs did not change between those source states. The four-file r4 delta adds the exact packaging recipe and focused tests and corrects certificate extraction in the signing verifier; it changes no app production source, dependency source or notice text.
+## Actual publisher Build4 route: new native artifact and local signing
 
-`ios/scripts/repackage-verified-device.py` requires the exact verified Build2 device archive SHA-256 `7a122500a92eceb6c8a4fdf27e6db115957424a05233d2246d8960fdf0fe1148`, native executable SHA-256 `4890e80bed94e09e8ddacfdb03a5270b58b72985ed1003da260e3b555fa95daa` and asset catalogue SHA-256 `0b48206ca937a036491603b7470093a4f2c86cbc7355c6123f6de3f382aab908`. It also pins the approved publisher's profile hash and public certificate fingerprint. It accepts this exact publisher candidate, with the owner's existing local key and profile; those assets and the base binary archive are not included in this public source package. Use the from-source instructions below for a fresh build or a fork.
+The successful device-only workflow run `37524826816` built native commit `d2a49d168aa22aa1d0bd050f146edb6582d9b961`. The local verification receipt identifies `GameRemote-1.10.0-build4.ipa`, SHA-256 `00be6d8cc925852f9298ca87e8c2949b15b627ddda8b5c8d065aa4d92bcc0ef3`. Frozen packaging commit `debc8f600729ec2c56a1b5ac4ebfbe5aedf2ed71` supplies the exact Build4 packaging recipe and tests. `provenance/build4-binary-provenance.json` records the filtered evidence and `SOURCE-MANIFEST.json` records every delivered source file.
 
-The recipe updates the bundle identifier, version/build and three public URLs, removes both encryption declaration keys for the explicit deferred mode, installs the root/nanopb/curl privacy manifests, embeds the approved profile and signs locally with DER entitlements. It verifies the app and IPA and checks that the original archive/profile and privacy manifests remain unchanged. This reviewed base app has no embedded Swift runtime dylibs or nested executable code; the recipe rejects Frameworks or PlugIns rather than inventing runtime support from another toolchain.
+`ios/scripts/repackage-verified-device.py` pins the new native archive SHA-256 `68a15a69aea24e93c0f9eb0e245052195f1bead2e820538d754c79066789e464`, unsigned executable SHA-256 `42c5f03c4a64298fde31521516279cb4937cac32207f60ff969bf369cf616907` and asset catalogue SHA-256 `ac6cf17a0a818d6cd95f73ae5c8c7ccfc39c7992f4939579e0eaa0503d0cc468`. The owner supplies that verified archive, the approved profile and an existing local signing identity. The source package includes the recipe and public identity/hash pins, while signing material and binary inputs remain with the owner. A fork can use the complete fresh-build instructions below.
 
-For the owner-controlled reproduction route, supply the verified archive/profile, existing keychain and a fresh absolute output path in the four `gr_` path variables before running this command. These variables contain paths, not exported private-key contents:
+The recipe applies the reviewed publisher metadata and privacy resources, deliberately leaves both encryption declaration keys absent in deferred mode, signs locally with DER entitlements, and verifies the app and IPA. Public configuration and resource hashes are retained in the receipt. The recipe does not establish physical-console playback or Apple acceptance.
+
+For the owner reproduction route, set the four `gr_` path variables to the verified Build4 archive, approved profile, existing keychain and a fresh absolute output path. Then run:
 
 ```sh
 export GR_IOS_BUNDLE_IDENTIFIER=com.ahmedalsalahy.gameremote
 export GR_IOS_DEVELOPMENT_TEAM=4J27D8LXNK
 export GR_IOS_VERSION=1.10.0
-export GR_IOS_BUILD_NUMBER=3
+export GR_IOS_BUILD_NUMBER=4
 export GR_IOS_PRIVACY_URL=https://saaalahy93-a11y.github.io/GameRemote/privacy.html
 export GR_IOS_SUPPORT_URL=https://saaalahy93-a11y.github.io/GameRemote/support.html
-export GR_IOS_SOURCE_URL=https://github.com/saaalahy93-a11y/GameRemote/releases/download/ios-1.10.0-build3-source-r4/GameRemote-iOS-1.10.0-build3-source-r4.tar.gz
+export GR_IOS_SOURCE_URL=https://github.com/saaalahy93-a11y/GameRemote/releases/download/ios-1.10.0-build4-source-r5/GameRemote-iOS-1.10.0-build4-source-r5.tar.gz
 export GR_IOS_EXPORT_CLASSIFICATION=defer-to-app-store-connect
 python3 ios/scripts/repackage-verified-device.py \
-  --archive "$gr_verified_build2_archive" \
+  --archive "$gr_verified_build4_archive" \
   --profile "$gr_approved_profile" \
   --keychain "$gr_existing_keychain" \
   --output "$gr_fresh_absolute_output" \
   --execute-signing
 ```
 
-This is the route documented by `provenance/build3-binary-provenance.json`. No new unsigned publisher archive helper/workflow is part of this r4 delta. Local signature/package verification passed in the existing release evidence; this packaging task did not rerun it. The deferred export questionnaire, Apple processing and physical-device playback remain unverified, and `submission_ready` remains `false`. Source URL availability is not asserted until the release owner publishes and verifies the exact archive.
-
-The from-source build route follows. It is preserved independently of the artifact-reuse recipe; a fresh build has its own output hashes and requires its own binary/signature/resource validation.
+The native workflow and signing evidence are supplied by the release coordinator. Source packaging verifies their identifiers and hashes against the frozen inputs and does not repeat signing or native work. Publication and availability at the exact source URL remain the release owner's next steps after independent r5 archive review.
 
 ## Host tools for a fresh source build
 
@@ -76,7 +76,7 @@ tar -xf "vendor-sources/mbedtls-3.6.7.tar.bz2" -C "$gr_vendor"
 
 The `third-party/curl`, `third-party/nanopb`, `third-party/gf-complete` and `third-party/jerasure` directories are already expanded source. Do not run `git submodule update` in this history-free package. The inherited `.gitmodules` file is provenance, not an instruction to replace those trees.
 
-## Configure and compile unsigned build 3
+## Configure and compile unsigned build 4
 
 The explicit FetchContent overrides below use every included upstream archive and prevent dependency fetching during configure. The fixed Opus package-version value replaces Git tag metadata absent from the source archive; it does not modify the upstream files. Other archive contents remain unchanged.
 
@@ -93,7 +93,7 @@ cmake -S "$gr_src/ios" -B "$gr_build" -G Xcode \
   -DCHIAKI_IOS_STORE_RELEASE=OFF \
   -DCHIAKI_IOS_BUNDLE_IDENTIFIER=com.ahmedalsalahy.gameremote \
   -DCHIAKI_IOS_DEVELOPMENT_TEAM=4J27D8LXNK \
-  -DCHIAKI_IOS_VERSION=1.10.0 -DCHIAKI_IOS_BUILD_NUMBER=3 \
+  -DCHIAKI_IOS_VERSION=1.10.0 -DCHIAKI_IOS_BUILD_NUMBER=4 \
   -DPYTHON_EXECUTABLE="$CHIAKI_HOST_PYTHON" -DPython_EXECUTABLE="$CHIAKI_HOST_PYTHON" \
   -DPROTOC="$CHIAKI_HOST_PROTOC" -Dnanopb_PROTOC_PATH="$CHIAKI_HOST_PROTOC" \
   -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DFETCHCONTENT_FULLY_DISCONNECTED=ON \
@@ -110,7 +110,7 @@ For a simulator, use `gr_sdk=iphonesimulator` and `gr_arch=$(uname -m)` before t
 
 The bundle identifier and team shown above are public identifiers for the intended publisher candidate, not credentials. For your own signed fork, use identifiers and signing assets you control. This unsigned build does not install or launch on a physical iPhone and is not an App Store upload.
 
-The simpler existing `GR_IOS_VERSION=1.10.0 GR_IOS_BUILD_NUMBER=3 ios/scripts/build.sh <sdk>` route remains available, but its configure step fetches the pinned upstream Git/archive dependencies unless you have separately configured all FetchContent source overrides. The explicit commands above use the included source inputs.
+The simpler existing `GR_IOS_VERSION=1.10.0 GR_IOS_BUILD_NUMBER=4 ios/scripts/build.sh <sdk>` route remains available, but its configure step fetches the pinned upstream Git/archive dependencies unless you have separately configured all FetchContent source overrides. The explicit commands above use the included source inputs.
 
 ## Signing and source identity
 
@@ -118,7 +118,7 @@ The simpler existing `GR_IOS_VERSION=1.10.0 GR_IOS_BUILD_NUMBER=3 ios/scripts/bu
 
 For local archive/export while the questionnaire remains pending, the supported explicit setting is `GR_IOS_EXPORT_CLASSIFICATION=defer-to-app-store-connect` (or `CHIAKI_IOS_EXPORT_CLASSIFICATION=defer-to-app-store-connect` for direct CMake configuration). This mode omits both `ITSAppUsesNonExemptEncryption` and `ITSEncryptionExportComplianceCode`; archive and IPA checks reject either key being present. Missing or unrecognized store values remain errors. The other accepted modes remain `exempt` and `non-exempt` and require the owner's actual classification. The deferred choice does not assert an exemption or supply a compliance code. Complete the App Store Connect questionnaire and any required documentation for the final candidate before submission.
 
-The signing report records the chosen mode, `export_declaration_pending=true` for deferred declarations, and `submission_ready=false`. The separately delivered publisher IPA was signed locally through the artifact-reuse recipe above; no binary or signing material is included in this source archive. A fresh from-source build of r4 has not been run by this packaging task.
+The signing report records `export_declaration_pending=true` and `submission_ready=false`. The separately delivered Build4 IPA uses the new native artifact described above and was signed locally. Source packaging did not run native compilation or signing and has not demonstrated byte-identical reproduction from this standalone archive.
 
 The signing helper reports `git rev-parse HEAD`; this package deliberately has no Git database. Before using that helper, create a new local Git repository and commit only the unpacked source package **before** creating build directories or supplying signing material. That fresh commit is a new source identity; preserve this package's archive hash and manifest alongside it. Alternatively use an approved committed checkout whose build inputs match this manifest. Do not claim the old base commit alone identifies the later reviewed changes. The source-owner commit hash above is a provenance reference; it does not turn this history-free, iOS-only selection into a full checkout of that commit.
 
@@ -126,24 +126,12 @@ The GitHub signing workflow is retained as source, requires explicit manual disp
 
 ## Expected resources and verification boundary
 
-The next native app must contain its root `PrivacyInfo.xcprivacy`, exact AGPL/OpenSSL licence and `ThirdPartyNotices.txt`, and `nanopb_Privacy.bundle/PrivacyInfo.xcprivacy` byte-identical to `third-party/nanopb/spm_resources/PrivacyInfo.xcprivacy`. The new `ios/cmake/NanopbPrivacy.cmake` packages the upstream manifest separately; it does not rewrite the manifest.
+The app must contain the root `PrivacyInfo.xcprivacy`, AGPL/OpenSSL licence, `ThirdPartyNotices.txt`, `nanopb_Privacy.bundle/PrivacyInfo.xcprivacy` and `curl_Privacy.bundle/PrivacyInfo.xcprivacy`. The nanopb resource preserves its upstream source; the curl resource is the pinned integration declaration from `ios/Dependencies/curl/PrivacyInfo.xcprivacy`. Their separate binary checks are recorded in the public receipt.
 
-Every archive member is compared with approved r3 for bytes, type and mode; two approved source replacements, two source additions and the listed packaging/provenance documents are the only differences. Prior static source/resource closure and notice audits are inherited for unchanged bytes, as recorded in SOURCE-DELTA.json. No Xcode build or old test suite was rerun while preparing it. The offline command sequence is derived from the actual CMake/build entry points and source pins; native execution of this exact source-package configuration remains unqualified. A subsequent candidate still needs its own signature/resource/binary validation, device playback evidence and matching public source/metadata.
+Every r5 archive member is compared with approved r4 for bytes, type, mode, link target and other non-size metadata. Only the explicitly listed source and packaging/provenance delta may differ. Four vendor trees, all five upstream archives and every licence/notice member remain byte-identical. Existing source closure and sanitization evidence is inherited only for unchanged members; new source and public receipts are checked for restricted paths and credential markers. The standalone from-source commands are retained from the reviewed package with build 4 selected, but executing these exact offline commands and reproducing a signed IPA byte for byte remain unverified.
 
-## Licence and attribution
+## Licence and historical provenance
 
-GameRemote is a modified derivative of chiaki-ng, based on Chiaki. Preserve `COPYING`, `LICENSES/AGPL-3.0-only-OpenSSL.txt`, the original author/copyright notices and all dependency notices. `notices/` contains exact licence copies plus the same nine-component notice text as the retained Build2 app; that notice equality does not establish binary equality. Mbed TLS and its framework retain their original dual-licence texts. This source package does not grant a different licence or establish compatibility between App Store binary terms and those obligations.
+GameRemote is a modified derivative of chiaki-ng, based on Chiaki. Preserve `COPYING`, `LICENSES/AGPL-3.0-only-OpenSSL.txt`, `docs/prototype/NOTICE.md`, original author/copyright text and `notices/`. Mbed TLS and its framework retain their original dual-licence texts. Known public upstream cryptographic test fixtures are source data. The separate distribution-rights review, export questionnaire, Apple processing and physical-device playback remain outside this source-packaging result.
 
-Any later privacy or metadata source change is a separate candidate. Regenerate the source snapshot and hashes after such a change; this sealed snapshot does not include future edits. The separate rights review leaves App Store binary distribution permission under current terms unresolved; source publication alone does not resolve that question.
-
-## Retained r2 curl privacy resource correction
-
-The reviewed ios/cmake/CurlPrivacy.cmake helper also packages this pinned iOS integration’s manifest, ios/Dependencies/curl/PrivacyInfo.xcprivacy, as GameRemote.app/curl_Privacy.bundle/PrivacyInfo.xcprivacy. This is an integration-specific curl declaration, not an upstream general-purpose manifest. The app manifest also declares the reviewed file-metadata reason. Final Xcode aggregation and runtime behaviour remain unverified.
-
-The earlier six-file curl delta is preserved in provenance/SOURCE-DELTA.r2.json as historical evidence. Its source changes, all five dependency archives and all four expanded vendor trees remain intact.
-
-## Retained r3 deferred export declaration delta
-
-The earlier seven-file deferred export declaration delta is preserved as historical evidence in provenance/SOURCE-DELTA.r3.json. The r3 archive was independently approved at its exact hash; provenance/BASE-REVIEW-r3.json records that review. All those changes remain present. SOURCE-DELTA.json now records the four-file r4 packaging/verifier delta. This newly assembled r4 archive requires its own independent delta review.
-
-The planned source archive URL already embedded in the separately signed IPA is https://github.com/saaalahy93-a11y/GameRemote/releases/download/ios-1.10.0-build3-source-r4/GameRemote-iOS-1.10.0-build3-source-r4.tar.gz. This packaging task performs no upload or publication. The outer delivery receipt binds this source archive's hash to the existing IPA hash; no byte-identical fresh build or App Store acceptance is claimed.
+`provenance/HISTORY.md` explains the retained r2/r3/r4 records and Build3 hold. `provenance/BASE-REVIEW-r4.json` is approval of the exact base archive, not r5 approval. This new r5 archive requires its own independent delta review. Future source/privacy/metadata changes require a new snapshot and hashes.

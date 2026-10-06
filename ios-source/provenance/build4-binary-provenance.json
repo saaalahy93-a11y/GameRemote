@@ -1,0 +1,70 @@
+{
+  "assets_sha256": "ac6cf17a0a818d6cd95f73ae5c8c7ccfc39c7992f4939579e0eaa0503d0cc468",
+  "base_archive_sha256": "68a15a69aea24e93c0f9eb0e245052195f1bead2e820538d754c79066789e464",
+  "base_executable_sha256": "42c5f03c4a64298fde31521516279cb4937cac32207f60ff969bf369cf616907",
+  "changed_info_keys": [
+    "CFBundleIdentifier",
+    "CFBundleShortVersionString",
+    "CFBundleVersion",
+    "GameRemotePrivacyPolicyURL",
+    "GameRemoteSourceURL",
+    "GameRemoteSupportURL"
+  ],
+  "embedded_swift_runtime": [],
+  "excluded_receipt_fields": [
+    "profile_sha256",
+    "signing_certificate_sha1"
+  ],
+  "export_declaration_pending": true,
+  "ipa": "GameRemote-1.10.0-build4.ipa",
+  "ipa_sha256": "00be6d8cc925852f9298ca87e8c2949b15b627ddda8b5c8d065aa4d92bcc0ef3",
+  "key_exported": false,
+  "limits": [
+    "Apple processing and physical-device playback remain unverified."
+  ],
+  "metadata_source_commit": "d2a49d168aa22aa1d0bd050f146edb6582d9b961",
+  "native_build": {
+    "archive_sha256": "68a15a69aea24e93c0f9eb0e245052195f1bead2e820538d754c79066789e464",
+    "assets_sha256": "ac6cf17a0a818d6cd95f73ae5c8c7ccfc39c7992f4939579e0eaa0503d0cc468",
+    "conclusion": "success",
+    "executable_sha256": "42c5f03c4a64298fde31521516279cb4937cac32207f60ff969bf369cf616907",
+    "run_id": 37524826816,
+    "source_commit": "d2a49d168aa22aa1d0bd050f146edb6582d9b961",
+    "url": "https://github.com/saaalahy93-a11y/gameremote-ios-build/actions/runs/37524826816"
+  },
+  "native_source_changed_from_build3": true,
+  "native_source_commit": "d2a49d168aa22aa1d0bd050f146edb6582d9b961",
+  "new_native_build": true,
+  "original_verification_receipt_sha256": "52965c5234d09bf149feeeefd26f83ccfe228451d6e13fea8c6e1bc9b1182664",
+  "packaging_commit": "debc8f600729ec2c56a1b5ac4ebfbe5aedf2ed71",
+  "packaging_recipe_sha256": "3f06e50765246fce22b6de22dc3f0d232e1f46f6d474ab1072ac5ee75b1c4659",
+  "packaging_source_commit": "debc8f600729ec2c56a1b5ac4ebfbe5aedf2ed71",
+  "privacy_manifests": {
+    "PrivacyInfo.xcprivacy": "e2af0b87a04394e232c6939282d10b711a03bf5c6aad216b1338442d40a2624f",
+    "curl_Privacy.bundle/PrivacyInfo.xcprivacy": "2f7f23e0fcea4a096af7d2efef399ca93e79c91cc06cc60837a51dafd8c6e4a9",
+    "nanopb_Privacy.bundle/PrivacyInfo.xcprivacy": "729ba3cbd0f458c78cd61edf17350edafe0e34ca86e314ec64c8cb22ccd21b54"
+  },
+  "public_configuration": {
+    "BUILD_NUMBER": "4",
+    "BUNDLE_IDENTIFIER": "com.ahmedalsalahy.gameremote",
+    "DEVELOPMENT_TEAM": "4J27D8LXNK",
+    "EXPORT_CLASSIFICATION": "defer-to-app-store-connect",
+    "PRIVACY_URL": "https://saaalahy93-a11y.github.io/GameRemote/privacy.html",
+    "SOURCE_URL": "https://github.com/saaalahy93-a11y/GameRemote/releases/download/ios-1.10.0-build4-source-r5/GameRemote-iOS-1.10.0-build4-source-r5.tar.gz",
+    "SUPPORT_URL": "https://saaalahy93-a11y.github.io/GameRemote/support.html",
+    "VERSION": "1.10.0"
+  },
+  "receipt_basis": "Selected public fields from the coordinator's separately verified new Build4 native artifact and local-signing receipt. Source packaging did not repeat native builds, signing or app verification.",
+  "schema_version": 1,
+  "signed_executable_sha256": "bd2234521a303c1faf9983fdf227de9a7f8ba64d9e533d750cae905281e72b5f",
+  "source_archive_hash": "Recorded in the outer delivery receipt and checksums to avoid an archive self-hash cycle.",
+  "source_publication": {
+    "availability_checked_by_this_packaging_task": false,
+    "performed_by_this_packaging_task": false,
+    "planned_url_embedded_in_ipa": "https://github.com/saaalahy93-a11y/GameRemote/releases/download/ios-1.10.0-build4-source-r5/GameRemote-iOS-1.10.0-build4-source-r5.tar.gz"
+  },
+  "status": "LOCALLY_SIGNED_IPA_VERIFIED",
+  "submission_ready": false,
+  "superseded_build3_status": "UPLOADED_BUT_HELD_AFTER_HMAC_BUFFER_DEFECT; historical evidence only",
+  "uploaded": false
+}

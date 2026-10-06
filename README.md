@@ -16,4 +16,4 @@ GameRemote is derived from chiaki-ng and Chiaki. The app source retains AGPL-3.0
 
 GameRemote is not endorsed or certified by Sony Interactive Entertainment LLC. PlayStation, PS5 and PS4 are trademarks of their respective owners.
 
-The iOS source snapshot is intended for version 1.10.0, build 3 and includes the reviewed signing/resource preparation. It has not yet produced a matching signed release binary. The earlier prototype builds are not asserted to match this snapshot.
+The iOS source snapshot corresponds to the locally signed GameRemote 1.10.0 Build4 candidate, including the native crypto buffer correction. Its native-build and signed-binary provenance is recorded in ios-source/provenance/build4-binary-provenance.json. The earlier Build3 candidate is held. Apple processing, physical iPhone testing and release declarations remain separate from source publication.

@@ -2271,9 +2271,8 @@ CHIAKI_EXPORT ChiakiErrorCode chiaki_rpcrypt_generate_iv(ChiakiRPCrypt *rpcrypt,
 	buf[CHIAKI_RPCRYPT_KEY_SIZE + 6] = (uint8_t)((counter >> 0x08) & 0xff);
 	buf[CHIAKI_RPCRYPT_KEY_SIZE + 7] = (uint8_t)((counter >> 0x00) & 0xff);
 
-	uint8_t hmac[CHIAKI_RPCRYPT_KEY_SIZE];
-	unsigned int hmac_len = 0;
-
+	// HMAC-SHA256 produces 32 bytes; the IV uses the first 16.
+	uint8_t hmac[32];
 
 	mbedtls_md_context_t ctx;
 	mbedtls_md_type_t type = MBEDTLS_MD_SHA256;

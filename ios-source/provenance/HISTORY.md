@@ -1,0 +1,3 @@
+# Historical source and binary evidence
+
+All r2/r3/r4 reviews and Build3 receipts in this directory describe those earlier exact artifacts. Their bytes are retained for provenance. Build3 was subsequently uploaded but HELD after the HMAC buffer defect. Earlier native-code reuse and pending-review statements are historical, not current Build4/r5 claims. README.r4.md, BUILDING-iOS.r4.md and SOURCE-DELTA.r4.json are exact earlier documents. Current Build4 production source requires the new native build recorded in build4-binary-provenance.json. The current source integration is r5-source-integration.json; r5 archive approval is separate and pending.

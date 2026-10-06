@@ -1,0 +1,100 @@
+{
+  "all_five_upstream_archives_and_all_four_vendor_trees_unchanged": true,
+  "all_licence_and_notice_bytes_unchanged": true,
+  "base_archive": {
+    "bytes": 20013843,
+    "file": "GameRemote-iOS-1.10.0-build3-source-r3.tar.gz",
+    "sha256": "d55e6c34265bac9d1b5b7167296345cb5bc74e093b33410aef4a681b890c7bf3"
+  },
+  "base_review": {
+    "archive_sha256": "d55e6c34265bac9d1b5b7167296345cb5bc74e093b33410aef4a681b890c7bf3",
+    "decision": "APPROVE",
+    "receipt": "provenance/BASE-REVIEW-r3.json",
+    "reviewer": "mac_vulkan_cpp_review"
+  },
+  "binary_provenance": "provenance/build3-binary-provenance.json",
+  "compiled_app_source_changed_in_r4": false,
+  "corresponding_ipa_sha256": "4d390f97d09195312b4989de84d73dcea5934b7d880dd4b38310c11787c95104",
+  "dependency_downloads_performed": 0,
+  "integration": {
+    "decision": "APPROVE",
+    "existing_focused_test_and_ruff_evidence": [
+      "20261006-200232-sk2lwjje.log",
+      "20261006-200703-evbkpcsv.log",
+      "20261006-201001-gqlu980h.log"
+    ],
+    "frozen_source_commit": "5c1df97059d541c6fc1295abbabd51a415980e26",
+    "receipt": "provenance/r4-source-integration.json",
+    "reviewer": "ios_ci_python_review",
+    "status": "FROZEN_INDEPENDENTLY_REVIEWED_SOURCE_DELTA"
+  },
+  "limits": [
+    "Apple processing and physical-device playback remain unverified.",
+    "No byte-identical fresh source build, App Store acceptance or legal distribution attestation is claimed."
+  ],
+  "packaging_additions": [
+    "provenance/BASE-REVIEW-r3.json",
+    "provenance/SOURCE-DELTA.r3.json",
+    "provenance/build3-binary-provenance.json",
+    "provenance/r4-source-integration.json"
+  ],
+  "packaging_replacements": [
+    "BUILDING-iOS.md",
+    "README.md",
+    "SOURCE-DELTA.json",
+    "SOURCE-MANIFEST.json"
+  ],
+  "planned_source_url_in_signed_ipa": "https://github.com/saaalahy93-a11y/GameRemote/releases/download/ios-1.10.0-build3-source-r4/GameRemote-iOS-1.10.0-build3-source-r4.tar.gz",
+  "project_added": 2,
+  "project_changed": 2,
+  "project_removed": 0,
+  "r4_archive_review": "PENDING_INDEPENDENT_DELTA_REVIEW",
+  "revision": "r4",
+  "root_directory_rename": {
+    "after": "GameRemote-iOS-1.10.0-build3-source-r4",
+    "before": "GameRemote-iOS-1.10.0-build3-source-r3"
+  },
+  "route": "Existing verified Build2 native code/assets, reviewed metadata/privacy resources, local signing; no new CI/native build or key export.",
+  "schema_version": 1,
+  "source_changes": [
+    {
+      "bytes": 18727,
+      "change": "changed",
+      "mode": "0644",
+      "path": "ios/scripts/apple_signing.py",
+      "previous_sha256": "414631c00959beffe9a5b0bea5b10385bd0dab345278c911c5b915f21d2e44f9",
+      "sha256": "ace5e63a53ee26f3a9e36cf0e7ca0fe4c6768a5418b08be2495cd3c2f3212cdc",
+      "type": "file"
+    },
+    {
+      "bytes": 8530,
+      "change": "added",
+      "mode": "0644",
+      "path": "ios/scripts/repackage-verified-device.py",
+      "previous_sha256": null,
+      "sha256": "3d4802bf92aeb268881188d4f81c1a6dbb878e27a67dd35f78ccf8cdc0a92e3a",
+      "type": "file"
+    },
+    {
+      "bytes": 41086,
+      "change": "changed",
+      "mode": "0644",
+      "path": "ios/tests/test_apple_signing.py",
+      "previous_sha256": "cee89d3f5b27d496fbf49015b12df0386c9c392f88eab1ce0c3187cce2a33767",
+      "sha256": "dd227b9cddbf16cef4fc0d9d73de5dbc11ad5d70220ab98c91515919657e0e76",
+      "type": "file"
+    },
+    {
+      "bytes": 2459,
+      "change": "added",
+      "mode": "0644",
+      "path": "ios/tests/test_repackage_verified_device.py",
+      "previous_sha256": null,
+      "sha256": "76b6e3f0a4694eadd6d3c644eca8e0b3e4bb43869fa77ed3691a1bab6e9daad2",
+      "type": "file"
+    }
+  ],
+  "source_owner_commit": "5c1df97059d541c6fc1295abbabd51a415980e26",
+  "tests_native_builds_or_signing_rerun_during_source_packaging": false,
+  "unchanged_project_members": 5037
+}

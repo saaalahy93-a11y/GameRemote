@@ -1,15 +1,15 @@
 {
   "base_commit": "eb239a085943b523a23235e06ea6e5c7791d4dd5",
   "base_source_archive": {
-    "bytes": 20013843,
-    "file": "GameRemote-iOS-1.10.0-build3-source-r3.tar.gz",
-    "sha256": "d55e6c34265bac9d1b5b7167296345cb5bc74e093b33410aef4a681b890c7bf3"
+    "bytes": 20024219,
+    "file": "GameRemote-iOS-1.10.0-build3-source-r4.tar.gz",
+    "sha256": "79a5b31fc16915d5853cc614e211b164196ba162754c533256a82010b528ac64"
   },
-  "binary_match_status": "Existing locally signed Build3 IPA is mapped through its filtered verification receipt and approved Build2 native-source reuse. A byte-identical new native build is not claimed.",
-  "binary_provenance": "provenance/build3-binary-provenance.json",
-  "commit_scope": "Frozen packaging source commit hash only; iOS-only selection without repository references or history.",
-  "corresponding_ipa_sha256": "4d390f97d09195312b4989de84d73dcea5934b7d880dd4b38310c11787c95104",
-  "created_utc": "2026-10-06T19:19:18.224257+00:00",
+  "binary_match_status": "New Build4 native artifact at the recorded production-source commit, then independently verified local signing. No byte-identical build from this standalone source archive is claimed.",
+  "binary_provenance": "provenance/build4-binary-provenance.json",
+  "commit_scope": "Commit IDs and selected immutable blobs only; no repository database or history is included.",
+  "corresponding_ipa_sha256": "00be6d8cc925852f9298ca87e8c2949b15b627ddda8b5c8d065aa4d92bcc0ef3",
+  "created_utc": "2026-10-06T20:47:29.987742+00:00",
   "deferred_export_integration": {
     "input_delta_sha256": "713859f1ce700ea80b6097c31d8550bcabd6d724d0a8474458233726729aa053",
     "patch_sha256": "421aecde02b408e27de86becb0815fbcaa3d987f982e1333887e7b93176b723a",
@@ -2568,22 +2568,53 @@
     "source_commit": "432b5e8f72e42c0b47f6568f8a9560e4d0b678e9",
     "verification_scope": "Complete archive member comparison and exact approved seven-file delta; no repeated native build/test suite or new source-content audit."
   },
-  "intended_build": "3",
+  "inherited_r4_evidence": {
+    "binary_match_status": "Existing locally signed Build3 IPA is mapped through its filtered verification receipt and approved Build2 native-source reuse. A byte-identical new native build is not claimed.",
+    "binary_provenance": "provenance/build3-binary-provenance.json",
+    "corresponding_ipa_sha256": "4d390f97d09195312b4989de84d73dcea5934b7d880dd4b38310c11787c95104",
+    "intended_build": "3",
+    "limits": [
+      "This is an iOS-only source selection, not a full multi-platform repository export.",
+      "App Store binary distribution permission under current terms remains unresolved in the separate rights review; source publication alone does not resolve that question.",
+      "Source bytes and modes are verified; native rebuild and byte-identical binary reproduction are not claimed.",
+      "Later privacy or metadata source changes require a new snapshot and new archive hash; they are not retroactively included in this candidate.",
+      "App Store distribution/licence compatibility, final export/privacy answers and physical playback remain separate gates."
+    ],
+    "r4_integration": {
+      "decision": "APPROVE",
+      "existing_focused_test_and_ruff_evidence": [
+        "20261006-200232-sk2lwjje.log",
+        "20261006-200703-evbkpcsv.log",
+        "20261006-201001-gqlu980h.log"
+      ],
+      "frozen_source_commit": "5c1df97059d541c6fc1295abbabd51a415980e26",
+      "receipt": "provenance/r4-source-integration.json",
+      "reviewer": "ios_ci_python_review",
+      "status": "FROZEN_INDEPENDENTLY_REVIEWED_SOURCE_DELTA"
+    },
+    "r4_verification_scope": "Full archive member byte/type/mode comparison; four approved source files, packaging-document delta and selected public prior binary evidence. No repeated native/test/signing runs or full prior source audit.",
+    "scope": "Historical exact r4/Build3 state. Build3 was later uploaded but held after the HMAC defect; none of these records approves Build4 or r5.",
+    "source_owner_commit": "5c1df97059d541c6fc1295abbabd51a415980e26",
+    "status": "APPROVED_R4_SOURCE_DELTA_PACKAGED_PENDING_ARCHIVE_REVIEW"
+  },
+  "intended_build": "4",
   "intended_version": "1.10.0",
   "limits": [
-    "This is an iOS-only source selection, not a full multi-platform repository export.",
-    "App Store binary distribution permission under current terms remains unresolved in the separate rights review; source publication alone does not resolve that question.",
-    "Source bytes and modes are verified; native rebuild and byte-identical binary reproduction are not claimed.",
-    "Later privacy or metadata source changes require a new snapshot and new archive hash; they are not retroactively included in this candidate.",
-    "App Store distribution/licence compatibility, final export/privacy answers and physical playback remain separate gates."
+    "This is an iOS-only source selection without repository history or application binaries.",
+    "The native Build4 artifact and local signing are supported by separate release evidence; source packaging did not repeat them.",
+    "A byte-identical fresh build from this standalone source archive is not established.",
+    "Apple processing, physical-device playback, export answers and distribution rights remain separate release gates.",
+    "The newly assembled r5 archive requires its own independent delta review before publication."
   ],
   "manifest_self_hash": "Excluded from this manifest to avoid recursion; delivered archive receipt independently hashes this member.",
   "matches_build2_binary": false,
+  "native_source_changed_from_build3": true,
+  "native_source_commit": "d2a49d168aa22aa1d0bd050f146edb6582d9b961",
   "packaging_additions": [
     {
-      "bytes": 16218,
+      "bytes": 13794,
       "path": "BUILDING-iOS.md",
-      "sha256": "e9a51072fedc09c4117758146b107301a46c012fff8e6f5adc6c41923a250b2b"
+      "sha256": "d03ce432f1702523be09288f82464d76964313b6cc0e24d8f4d974b4f3a17be6"
     },
     {
       "bytes": 18899,
@@ -2591,14 +2622,14 @@
       "sha256": "1640a41c8971bfc43f0a96757c82662d3150ab21b3ad33e888910c390c058139"
     },
     {
-      "bytes": 3740,
+      "bytes": 2659,
       "path": "README.md",
-      "sha256": "b3f913a45a51351ae255fcbf6a68e8bb43251189154b0b627a94fc551bd336c9"
+      "sha256": "db99834beae9e6e41b097d0eaaec89f83558c5f5298899375b41588d00cd7ec8"
     },
     {
-      "bytes": 3835,
+      "bytes": 10468,
       "path": "SOURCE-DELTA.json",
-      "sha256": "392f204544635da2cfcb15562d2ee4fef7180b3827d6cd2bda85a0c0c6980a16"
+      "sha256": "4aeffcf205694da0d5f57c2a0e9c403d58be1869ef531a48228d10417935547e"
     },
     {
       "bytes": 10042,
@@ -2676,6 +2707,26 @@
       "sha256": "f94985153006c05ae4ef643bad77b66dd6d12d9a9d6b76334bb3c8bb896ad171"
     },
     {
+      "bytes": 617,
+      "path": "provenance/BASE-REVIEW-r4.json",
+      "sha256": "cb66236ada81fb537916eeae8612d91b513214b0c011cfb031555b80339997af"
+    },
+    {
+      "bytes": 16218,
+      "path": "provenance/BUILDING-iOS.r4.md",
+      "sha256": "e9a51072fedc09c4117758146b107301a46c012fff8e6f5adc6c41923a250b2b"
+    },
+    {
+      "bytes": 655,
+      "path": "provenance/HISTORY.md",
+      "sha256": "371fc7b3d3a0a5fed7b1ea6bf11a463f4cffd1788a16e38bd95d227aa5c28a8b"
+    },
+    {
+      "bytes": 3740,
+      "path": "provenance/README.r4.md",
+      "sha256": "b3f913a45a51351ae255fcbf6a68e8bb43251189154b0b627a94fc551bd336c9"
+    },
+    {
       "bytes": 4195,
       "path": "provenance/SOURCE-DELTA.r2.json",
       "sha256": "d4ea5fa32bfe6ac5ff0760b880e1e64e4ba27bf1cc5bace1302baa73a9883890"
@@ -2686,9 +2737,19 @@
       "sha256": "55564bad4ab8b33e4666ed985e77ee9aaf4180f560e1f4d57d4eee8f0823633b"
     },
     {
+      "bytes": 3835,
+      "path": "provenance/SOURCE-DELTA.r4.json",
+      "sha256": "392f204544635da2cfcb15562d2ee4fef7180b3827d6cd2bda85a0c0c6980a16"
+    },
+    {
       "bytes": 3348,
       "path": "provenance/build3-binary-provenance.json",
       "sha256": "2ed8ea0f3d07fcf7f34e24c58a64078831e17de3c3f5b3959271564cb67b28fa"
+    },
+    {
+      "bytes": 3832,
+      "path": "provenance/build4-binary-provenance.json",
+      "sha256": "75891e865760bac11835eb7e09f5908cec0223c444227b6bf86166e6609bc3ef"
     },
     {
       "bytes": 3446,
@@ -2704,6 +2765,11 @@
       "bytes": 1804,
       "path": "provenance/r4-source-integration.json",
       "sha256": "178335fb71a029a2aac13882ec5d22db010b323efb7236c516eca8dd898bbbad"
+    },
+    {
+      "bytes": 4890,
+      "path": "provenance/r5-source-integration.json",
+      "sha256": "5aac87b4bf291deaf878bb97c8afe02828c612e9c6ad5ed43d90319033514c46"
     },
     {
       "bytes": 649,
@@ -2757,6 +2823,19 @@
       "sha256": "fa2cbb6c1eef60562ec33c35dea0a6c3d736a803e696104a7babdd93e3ed52e5",
       "snapshot_git_blob_id": "b1c7e3598efb02879a0f6b6624392562d0dac142",
       "source": "committed_git_blob",
+      "type": "file"
+    },
+    {
+      "base_git_object_id": null,
+      "bytes": 328,
+      "mode": "0644",
+      "original_project_path": ".github/workflows/ios-device-rebuild.yml",
+      "path": ".github/workflows/ios-device-rebuild.yml",
+      "previous_r4_sha256": null,
+      "sha256": "811090c813836298d554720bafc7aa5587ba86c5d01a232acdcbce1a37704efc",
+      "snapshot_git_blob_id": "68bd8ca851ee932c6fdc0d4a6a7e3b151d8ed094",
+      "source": "approved_immutable_build4_source_delta",
+      "source_commit": "d2a49d168aa22aa1d0bd050f146edb6582d9b961",
       "type": "file"
     },
     {
@@ -3665,13 +3744,15 @@
     },
     {
       "base_git_object_id": "e6a2123248303f426b118d3f49c4d6cdf4178039",
-      "bytes": 2732,
+      "bytes": 4015,
       "mode": "0644",
       "original_project_path": "ios/CRYPTO.md",
       "path": "ios/CRYPTO.md",
-      "sha256": "e686651938df2a329bc2353ee1380a3ed7e548818dc8b818151f321c97accba1",
-      "snapshot_git_blob_id": "e6a2123248303f426b118d3f49c4d6cdf4178039",
-      "source": "committed_git_blob",
+      "previous_r4_sha256": "e686651938df2a329bc2353ee1380a3ed7e548818dc8b818151f321c97accba1",
+      "sha256": "8743869650ff17ba0cf1236fb7560d156f9847af5a572e128e05e9988839f7e4",
+      "snapshot_git_blob_id": "449f551a555091b89783407d26265de8163ff186",
+      "source": "approved_immutable_build4_source_delta",
+      "source_commit": "d2a49d168aa22aa1d0bd050f146edb6582d9b961",
       "type": "file"
     },
     {
@@ -3822,14 +3903,16 @@
     },
     {
       "base_git_object_id": null,
-      "bytes": 8530,
+      "bytes": 9327,
       "mode": "0644",
       "original_project_path": "ios/scripts/repackage-verified-device.py",
       "path": "ios/scripts/repackage-verified-device.py",
       "previous_r3_sha256": null,
-      "sha256": "3d4802bf92aeb268881188d4f81c1a6dbb878e27a67dd35f78ccf8cdc0a92e3a",
-      "snapshot_git_blob_id": "3f4d8b815dc7617f9aba0269a11c83ef5495f941",
-      "source": "approved_and_frozen_local_packaging_delta",
+      "previous_r4_sha256": "3d4802bf92aeb268881188d4f81c1a6dbb878e27a67dd35f78ccf8cdc0a92e3a",
+      "sha256": "3f06e50765246fce22b6de22dc3f0d232e1f46f6d474ab1072ac5ee75b1c4659",
+      "snapshot_git_blob_id": "6ee540f2c07ff6bc872f07ac14ebfd732677c3e0",
+      "source": "approved_immutable_build4_source_delta",
+      "source_commit": "debc8f600729ec2c56a1b5ac4ebfbe5aedf2ed71",
       "type": "file"
     },
     {
@@ -3901,13 +3984,15 @@
     },
     {
       "base_git_object_id": "a822ea824f2f06a68d64b31b59cf532f4b0a6beb",
-      "bytes": 1793,
+      "bytes": 2682,
       "mode": "0755",
       "original_project_path": "ios/scripts/test-crypto-host.sh",
       "path": "ios/scripts/test-crypto-host.sh",
-      "sha256": "33b56ca5c1103a6091c73634b87e9e1c6cf0071be25977d9a9dfb227e973d9e3",
-      "snapshot_git_blob_id": "a822ea824f2f06a68d64b31b59cf532f4b0a6beb",
-      "source": "committed_git_blob",
+      "previous_r4_sha256": "33b56ca5c1103a6091c73634b87e9e1c6cf0071be25977d9a9dfb227e973d9e3",
+      "sha256": "0e453e11ff48b356d5709fdaedd012f3a3b31e2262f2a5927ebc050bcd3082fc",
+      "snapshot_git_blob_id": "d1b71f5fd08f875e42df0463ba1beb93e1b4e016",
+      "source": "approved_immutable_build4_source_delta",
+      "source_commit": "d2a49d168aa22aa1d0bd050f146edb6582d9b961",
       "type": "file"
     },
     {
@@ -4091,14 +4176,16 @@
     },
     {
       "base_git_object_id": null,
-      "bytes": 2459,
+      "bytes": 5628,
       "mode": "0644",
       "original_project_path": "ios/tests/test_repackage_verified_device.py",
       "path": "ios/tests/test_repackage_verified_device.py",
       "previous_r3_sha256": null,
-      "sha256": "76b6e3f0a4694eadd6d3c644eca8e0b3e4bb43869fa77ed3691a1bab6e9daad2",
-      "snapshot_git_blob_id": "3c45a3541489c57309e09b1387c03455d8c4feef",
-      "source": "approved_and_frozen_local_packaging_delta",
+      "previous_r4_sha256": "76b6e3f0a4694eadd6d3c644eca8e0b3e4bb43869fa77ed3691a1bab6e9daad2",
+      "sha256": "cf121f2e37f4f1b05b3282ab7dc9ac2f3facb979d3c789e2a0e1eabbd7bd3f1a",
+      "snapshot_git_blob_id": "b7c61c49f20b9ccb480a3dc20f9c059aeb2b287a",
+      "source": "approved_immutable_build4_source_delta",
+      "source_commit": "debc8f600729ec2c56a1b5ac4ebfbe5aedf2ed71",
       "type": "file"
     },
     {
@@ -5115,13 +5202,15 @@
     },
     {
       "base_git_object_id": "7cb9810c0cbf94a64abc94a30f359337589f0f12",
-      "bytes": 135120,
+      "bytes": 135131,
       "mode": "0644",
       "original_project_path": "lib/src/rpcrypt.c",
       "path": "lib/src/rpcrypt.c",
-      "sha256": "e482cd024d23bab33238058f7499b30c1ef77760a2cbc574a143dfa2e428a5ed",
-      "snapshot_git_blob_id": "7cb9810c0cbf94a64abc94a30f359337589f0f12",
-      "source": "committed_git_blob",
+      "previous_r4_sha256": "e482cd024d23bab33238058f7499b30c1ef77760a2cbc574a143dfa2e428a5ed",
+      "sha256": "4f85415fa6be6dec12897fe4caad51a51305e480867e5ebbe225fa97ce6b8bef",
+      "snapshot_git_blob_id": "a74d0dc97c5a4dc326dc0401fbd7552153a79377",
+      "source": "approved_immutable_build4_source_delta",
+      "source_commit": "d2a49d168aa22aa1d0bd050f146edb6582d9b961",
       "type": "file"
     },
     {
@@ -58326,23 +58415,11 @@
       "sha256": "1fd177388d644d89f42fb0c3eeb21864e42dd4e54d5d07c26878e5712f952b0f"
     }
   ],
-  "r4_integration": {
-    "decision": "APPROVE",
-    "existing_focused_test_and_ruff_evidence": [
-      "20261006-200232-sk2lwjje.log",
-      "20261006-200703-evbkpcsv.log",
-      "20261006-201001-gqlu980h.log"
-    ],
-    "frozen_source_commit": "5c1df97059d541c6fc1295abbabd51a415980e26",
-    "receipt": "provenance/r4-source-integration.json",
-    "reviewer": "ios_ci_python_review",
-    "status": "FROZEN_INDEPENDENTLY_REVIEWED_SOURCE_DELTA"
-  },
-  "r4_verification_scope": "Full archive member byte/type/mode comparison; four approved source files, packaging-document delta and selected public prior binary evidence. No repeated native/test/signing runs or full prior source audit.",
+  "r5_verification_scope": "Complete archive member byte/type/mode/metadata comparison, exact source hashes, public receipt checks and delta sanitization; no repeated full earlier-source audit, native build or signing run.",
   "schema_version": 1,
   "source_delta": "SOURCE-DELTA.json",
-  "source_owner_commit": "5c1df97059d541c6fc1295abbabd51a415980e26",
-  "source_read_policy": "Approved r3 archive plus exactly four frozen regular source files at supplied SHA-256 hashes and public packaging/provenance inputs. No other worktree files or Git history read; no signing material or binary copied into source.",
-  "source_revision": "r4",
-  "status": "APPROVED_R4_SOURCE_DELTA_PACKAGED_PENDING_ARCHIVE_REVIEW"
+  "source_owner_commit": "debc8f600729ec2c56a1b5ac4ebfbe5aedf2ed71",
+  "source_read_policy": "Immutable reviewed r4 archive plus six allowlisted blobs from the native and final packaging commits; selected public receipts only. No dirty worktree files, signing material or application binaries copied into source.",
+  "source_revision": "r5",
+  "status": "APPROVED_R5_SOURCE_DELTA_PACKAGED_PENDING_ARCHIVE_REVIEW"
 }

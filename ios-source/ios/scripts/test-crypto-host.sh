@@ -2,21 +2,40 @@
 # Real core tests with both crypto backends. This does not establish iOS linking or console interoperability.
 # Requires CMake, a C/C++ compiler, protoc, Python protobuf, and host json-c/miniupnpc/libevent/OpenSSL.
 # Run via agent-capture when required by the local development environment.
+# CHIAKI_CRYPTO_SANITIZERS=ON instruments the core and fetched MbedTLS with ASan/UBSan.
 set -eu
 root=$(CDPATH= cd -- "$(dirname -- "$0")/../.." && pwd)
 build_root=${CHIAKI_CRYPTO_BUILD_DIR:-"$root/ios/build/crypto-host"}
 cmake_bin=${CMAKE:-cmake}
 ctest_bin=${CTEST:-ctest}
 backend=${1:-both}
+test_suite=${2:-core}
 case "$backend" in
   both) backends="mbedtls openssl" ;;
   mbedtls|openssl) backends="$backend" ;;
-  *) printf 'Usage: %s [both|mbedtls|openssl]\n' "$0" >&2; exit 2 ;;
+  *) printf 'Usage: %s [both|mbedtls|openssl] [core|rpcrypt|regist]\n' "$0" >&2; exit 2 ;;
+esac
+case "$test_suite" in
+  core|rpcrypt|regist) ;;
+  *) printf 'Test suite must be core, rpcrypt or regist\n' >&2; exit 2 ;;
+esac
+set --
+build_suffix=
+case "${CHIAKI_CRYPTO_SANITIZERS:-OFF}" in
+  OFF) ;;
+  ON)
+    # Global compiler flags also reach FetchContent dependencies and the final link.
+    sanitizer_flags='-fsanitize=address,undefined -fno-sanitize-recover=all -fno-omit-frame-pointer'
+    set -- "-DCMAKE_C_FLAGS=${CFLAGS:-} $sanitizer_flags" \
+      "-DCMAKE_CXX_FLAGS=${CXXFLAGS:-} $sanitizer_flags"
+    build_suffix=-sanitizers
+    ;;
+  *) printf 'CHIAKI_CRYPTO_SANITIZERS must be ON or OFF\n' >&2; exit 2 ;;
 esac
 for backend in $backends; do
   use_mbedtls=OFF
   [ "$backend" != mbedtls ] || use_mbedtls=ON
-  build="$build_root/$backend"
+  build="$build_root/$backend$build_suffix"
   "$cmake_bin" -S "$root" -B "$build" \
     -DCMAKE_BUILD_TYPE=Debug -DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
     -DCHIAKI_ENABLE_TESTS=ON -DCHIAKI_ENABLE_CLI=OFF -DCHIAKI_ENABLE_GUI=OFF \
@@ -29,8 +48,12 @@ for backend in $backends; do
     -DCHIAKI_USE_SYSTEM_CURL=OFF -DCURL_USE_LIBPSL=OFF \
     -DCHIAKI_LIB_ENABLE_MBEDTLS="$use_mbedtls" \
     -DCHIAKI_LIB_MBEDTLS_EXTERNAL_PROJECT="$use_mbedtls" \
-    -DCHIAKI_LIB_OPENSSL_EXTERNAL_PROJECT=OFF
+    -DCHIAKI_LIB_OPENSSL_EXTERNAL_PROJECT=OFF "$@"
   "$cmake_bin" --build "$build" --target chiaki-unit --parallel 2
-  "$ctest_bin" --test-dir "$build" --output-on-failure --verbose
-  printf '%s core suite passed: %s\n' "$backend" "$build"
+  if [ "$test_suite" = core ]; then
+    "$ctest_bin" --test-dir "$build" --output-on-failure --verbose
+  else
+    "$build/test/chiaki-unit" "/chiaki/$test_suite"
+  fi
+  printf '%s %s suite passed: %s\n' "$backend" "$test_suite" "$build"
 done

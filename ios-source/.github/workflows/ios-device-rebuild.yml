@@ -1,0 +1,19 @@
+name: iOS device rebuild for local signing
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: ios-device-rebuild
+  cancel-in-progress: false
+
+jobs:
+  device:
+    uses: ./.github/workflows/ios-candidate-checks.yml
+    with:
+      target: device
+      source_commit: ${{ github.sha }}

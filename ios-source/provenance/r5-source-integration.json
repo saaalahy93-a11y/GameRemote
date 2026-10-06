@@ -1,0 +1,112 @@
+{
+  "files": [
+    {
+      "bytes": 328,
+      "change": "added",
+      "mode": "0644",
+      "path": ".github/workflows/ios-device-rebuild.yml",
+      "previous_sha256": null,
+      "read_from_commit": "d2a49d168aa22aa1d0bd050f146edb6582d9b961",
+      "sha256": "811090c813836298d554720bafc7aa5587ba86c5d01a232acdcbce1a37704efc",
+      "type": "file"
+    },
+    {
+      "bytes": 4015,
+      "change": "changed",
+      "mode": "0644",
+      "path": "ios/CRYPTO.md",
+      "previous_sha256": "e686651938df2a329bc2353ee1380a3ed7e548818dc8b818151f321c97accba1",
+      "read_from_commit": "d2a49d168aa22aa1d0bd050f146edb6582d9b961",
+      "sha256": "8743869650ff17ba0cf1236fb7560d156f9847af5a572e128e05e9988839f7e4",
+      "type": "file"
+    },
+    {
+      "bytes": 9327,
+      "change": "changed",
+      "mode": "0644",
+      "path": "ios/scripts/repackage-verified-device.py",
+      "previous_sha256": "3d4802bf92aeb268881188d4f81c1a6dbb878e27a67dd35f78ccf8cdc0a92e3a",
+      "read_from_commit": "debc8f600729ec2c56a1b5ac4ebfbe5aedf2ed71",
+      "sha256": "3f06e50765246fce22b6de22dc3f0d232e1f46f6d474ab1072ac5ee75b1c4659",
+      "type": "file"
+    },
+    {
+      "bytes": 2682,
+      "change": "changed",
+      "mode": "0755",
+      "path": "ios/scripts/test-crypto-host.sh",
+      "previous_sha256": "33b56ca5c1103a6091c73634b87e9e1c6cf0071be25977d9a9dfb227e973d9e3",
+      "read_from_commit": "d2a49d168aa22aa1d0bd050f146edb6582d9b961",
+      "sha256": "0e453e11ff48b356d5709fdaedd012f3a3b31e2262f2a5927ebc050bcd3082fc",
+      "type": "file"
+    },
+    {
+      "bytes": 5628,
+      "change": "changed",
+      "mode": "0644",
+      "path": "ios/tests/test_repackage_verified_device.py",
+      "previous_sha256": "76b6e3f0a4694eadd6d3c644eca8e0b3e4bb43869fa77ed3691a1bab6e9daad2",
+      "read_from_commit": "debc8f600729ec2c56a1b5ac4ebfbe5aedf2ed71",
+      "sha256": "cf121f2e37f4f1b05b3282ab7dc9ac2f3facb979d3c789e2a0e1eabbd7bd3f1a",
+      "type": "file"
+    },
+    {
+      "bytes": 135131,
+      "change": "changed",
+      "mode": "0644",
+      "path": "lib/src/rpcrypt.c",
+      "previous_sha256": "e482cd024d23bab33238058f7499b30c1ef77760a2cbc574a143dfa2e428a5ed",
+      "read_from_commit": "d2a49d168aa22aa1d0bd050f146edb6582d9b961",
+      "sha256": "4f85415fa6be6dec12897fe4caad51a51305e480867e5ebbe225fa97ce6b8bef",
+      "type": "file"
+    }
+  ],
+  "native_build": {
+    "archive_sha256": "68a15a69aea24e93c0f9eb0e245052195f1bead2e820538d754c79066789e464",
+    "assets_sha256": "ac6cf17a0a818d6cd95f73ae5c8c7ccfc39c7992f4939579e0eaa0503d0cc468",
+    "conclusion": "success",
+    "executable_sha256": "42c5f03c4a64298fde31521516279cb4937cac32207f60ff969bf369cf616907",
+    "run_id": 37524826816,
+    "source_commit": "d2a49d168aa22aa1d0bd050f146edb6582d9b961",
+    "url": "https://github.com/saaalahy93-a11y/gameremote-ios-build/actions/runs/37524826816"
+  },
+  "native_reviews": [
+    {
+      "decision": "APPROVE",
+      "evidence": "outputs/GameRemote-Release-Closure-20261006/evidence/ios-build4-integration-reviews.json",
+      "reviewer": "mac_vulkan_cpp_review",
+      "scope": "Production HMAC buffer correction, preserving the first 16-byte IV output."
+    },
+    {
+      "decision": "APPROVE",
+      "evidence": "outputs/GameRemote-Release-Closure-20261006/evidence/ios-build4-integration-reviews.json",
+      "reviewer": "ios_ci_python_review",
+      "scope": "Opt-in crypto sanitizer harness, documentation and device-only CI wrapper."
+    },
+    {
+      "decision": "APPROVE",
+      "evidence": "outputs/GameRemote-Release-Closure-20261006/evidence/ios-build4-integration-reviews.json",
+      "reviewer": "release_site_delta_review",
+      "scope": "Native four-file HMAC fix integration at d2a49d168aa22aa1d0bd050f146edb6582d9b961."
+    }
+  ],
+  "native_source_commit": "d2a49d168aa22aa1d0bd050f146edb6582d9b961",
+  "native_test_evidence": "Coordinator-reported real 9 Remote Play vectors and 5 registration tests passed ASan/UBSan; full-suite sanitizer run remains blocked by the pre-existing MUnit zero-bound parameter issue. See ios/CRYPTO.md for exact existing logs.",
+  "packaging_reviews": [
+    {
+      "decision": "APPROVE",
+      "evidence": "work/logs/20261006-214444-9lhcgbz_.log",
+      "reviewer": "ios_ci_python_review",
+      "scope": "Build4 verified-native signing recipe and seven focused boundary tests."
+    },
+    {
+      "decision": "APPROVE",
+      "evidence": "work/logs/20261006-214435-bv8ajqdi.log",
+      "reviewer": "release_site_delta_review",
+      "scope": "Build4 two-file signing delta, final lint-only corrections and exact reviewed hashes."
+    }
+  ],
+  "packaging_source_commit": "debc8f600729ec2c56a1b5ac4ebfbe5aedf2ed71",
+  "scope": "Production-source correction requires the recorded new native build; all dependencies, assets and notices in source remain unchanged.",
+  "status": "COORDINATOR_FROZEN_AND_INDEPENDENTLY_APPROVED"
+}

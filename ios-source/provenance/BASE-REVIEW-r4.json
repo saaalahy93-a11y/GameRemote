@@ -1,0 +1,10 @@
+{
+  "archive_sha256": "79a5b31fc16915d5853cc614e211b164196ba162754c533256a82010b528ac64",
+  "decision": "APPROVE",
+  "evidence_log": "20261006-202406-a1i26s79.log",
+  "findings": [],
+  "reviewer": "mac_vulkan_cpp_review",
+  "scope": "Historical independent approval of the exact r4 source archive only. Build3 was subsequently uploaded but held after the HMAC buffer defect; this review does not approve Build4 or r5.",
+  "source_manifest_sha256": "decac0ba0315b1e38a60536f36ebf6cd7b754bc6428847005b84ad56e3e55457",
+  "source_verification_sha256": "df60871dc9b9155625e3c34e9d268c93ab227be696b3e09740546dc7daab000b"
+}

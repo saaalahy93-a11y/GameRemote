@@ -32,11 +32,35 @@ not injected. Host suites do not establish native iOS linking or physical
 PS4/PS5 handshake, stream quality or controller behavior. Accepted macOS/Android
 packages are separate unchanged binaries.
 
+The Remote Play IV generator now reserves the full 32-byte HMAC-SHA256 output before
+copying the protocol's 16-byte IV. With both the core and fetched Mbed TLS
+instrumented, the original PS5 registration IV vector reproduced a stack buffer
+overflow (`work/logs/hmac-asan-before.61189`). After the buffer correction, all
+9 Remote Play crypto vectors and 5 registration tests passed ASan/UBSan, with no skips
+(`work/logs/20261006-210801-b5q2k9ot.log` and
+`work/logs/20261006-210823-o2nf4s95.log`).
+
+Repeat those focused checks with:
+
+```sh
+CHIAKI_CRYPTO_SANITIZERS=ON ios/scripts/test-crypto-host.sh mbedtls rpcrypt
+CHIAKI_CRYPTO_SANITIZERS=ON ios/scripts/test-crypto-host.sh mbedtls regist
+```
+
+Sanitizer builds use separate `*-sanitizers` directories. Omitting the suite
+argument still runs the full core suite. Its ASan/UBSan run currently fails
+before the Remote Play vectors because the existing MUnit parameter helper uses
+a variable array parameter whose bound is zero at `test/munit/munit.c:1079`
+(`work/logs/20261006-210406-gzwhfnt6.log`); a full-suite sanitizer pass is not
+established by the focused results above.
+
 Run `ios/scripts/test-crypto-host.sh` with pinned host code-generation tools and
 the documented host dependencies. Native iOS verification must use a full build
 after these production changes, never reuse the earlier simulator archive.
-Use `ios/scripts/build.sh` or the manual `release-ios.yml` workflow with
-`continue_candidate=false`. Physical-device qualification and export/licence
+Use `ios/scripts/build.sh` or the manual `ios-device-rebuild.yml` workflow for
+an unsigned physical-device build of the dispatched commit. The latter reuses
+the existing 35-minute job and 30-minute build bounds, without simulator work
+or signing credentials. Physical-device qualification and export/licence
 decisions remain release gates.
 
 References: [Mbed TLS 3.6.7](https://github.com/Mbed-TLS/mbedtls/releases/tag/mbedtls-3.6.7),
