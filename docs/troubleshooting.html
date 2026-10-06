@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Help with GameRemote iPhone and iPad preview pairing, Local Network permission, playback and controller input.">
+  <meta name="robots" content="index, follow">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="color-scheme" content="dark light">
+  <meta name="author" content="AHMED TAHA A A ALSAUXHY">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="GameRemote">
+  <meta property="og:title" content="Troubleshooting | GameRemote">
+  <meta property="og:description" content="Help with GameRemote iPhone and iPad preview pairing, Local Network permission, playback and controller input.">
+  <meta property="og:url" content="https://saaalahy93-a11y.github.io/GameRemote/troubleshooting.html">
+  <meta property="og:image" content="https://saaalahy93-a11y.github.io/GameRemote/assets/gameremote-icon.png">
+  <meta property="og:image:width" content="512">
+  <meta property="og:image:height" content="512">
+  <meta property="og:image:alt" content="GameRemote connected-screen mark">
+  <meta name="twitter:card" content="summary">
+  <title>Troubleshooting | GameRemote</title>
+  <link rel="canonical" href="https://saaalahy93-a11y.github.io/GameRemote/troubleshooting.html">
+  <link rel="icon" href="assets/gameremote-icon.png" type="image/png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header wrap">
+  <a class="brand" href="index.html" aria-label="GameRemote home"><img src="assets/gameremote-icon.png" width="512" height="512" alt="">GameRemote</a>
+  <nav aria-label="Main navigation"><a href="setup.html">Setup</a><a href="support.html">Support</a><a href="privacy.html">Privacy</a><a href="open-source.html">Open source</a></nav>
+</header>
+<aside class="preview" aria-label="Release status"><div class="wrap"><p><strong>Coming soon.</strong> GameRemote for iPhone, iPad and Mac is in development. Store downloads are not available yet.</p></div></aside>
+<main id="main" class="wrap" tabindex="-1">
+
+<header class="page-heading"><a class="crumb" href="support.html">Support</a><h1>Work through a connection issue.</h1><p>Start with the point where setup stops. This guide covers the iPhone and iPad preview on your home network.</p></header>
+<div class="article-layout">
+  <div class="prose">
+    <section id="pairing"><h2>Finding and pairing your console.</h2>
+      <details open><summary>My console does not appear automatically.</summary><div><p>Automatic discovery is not included in the iPhone and iPad preview. Add the console manually using its current local address. Confirm that the device and console can reach each other on the same network and that Remote Play is enabled.</p></div></details>
+      <details><summary>The Account ID is rejected.</summary><div><p>The registration form requires the Account ID for the console account in Base64 form that decodes to eight bytes. It does not accept an online name or email address as the Account ID. The app cannot look up this value or sign in to PSN.</p></div></details>
+      <details><summary>The pairing code is rejected or has expired.</summary><div><p>Open Link Device or Add Device on the console again, then enter the current eight-digit code in GameRemote. Check that you are registering the intended console and account. A console user's four-digit login PIN is a separate value.</p></div></details>
+      <details><summary>Local Network access was denied.</summary><div><p>Review GameRemote's Local Network permission in your device's Settings and allow access before retrying. Return to the app and try the local connection again. If it still fails, include the permission state in your support report.</p></div></details>
+    </section>
+    <section id="session"><h2>Video, sound and input.</h2>
+      <details><summary>The connection fails after registration.</summary><div><p>Check that the console is available, Remote Play remains enabled and the saved address is still its current local address. Keep both devices on the same reachable home network. Record the error message and where the connection stops.</p><p>Physical iPhone/iPad playback and reconnect behaviour have not yet been verified. A failed session may require an app fix as well as a network check.</p></div></details>
+      <details><summary>Playback is delayed, interrupted or out of sync.</summary><div><p>Check the connection between your device, console and home network. Congestion or an unstable link can affect playback. The preview targets 720p at 60 fps using H.264; it has no video-quality picker and does not guarantee frame rate or latency.</p></div></details>
+      <details><summary>A controller function does not work.</summary><div><p>Confirm that the controller is paired with your device. The iPhone and iPad preview includes basic paired game-controller input and on-screen controls. Touchpad swipes, motion input, rumble, adaptive triggers and microphone input are not included. Physical controller compatibility has not yet been verified.</p></div></details>
+    </section>
+    <section id="next"><h2>Still unable to connect?</h2><p>Record the error, app version, device, console model and steps that reproduce the issue. Keep all pairing credentials private.</p><a href="support.html#contact">Contact GameRemote support</a><p>For Mac builds, include your macOS version and the connection method you used.</p></section>
+  </div>
+  <aside class="toc"><h2>On this page</h2><ol><li><a href="#pairing">Pairing and permissions</a></li><li><a href="#session">Video and input</a></li><li><a href="#next">Further help</a></li></ol><p>GameRemote is still in development. These guides will change as testing and features progress.</p></aside>
+</div>
+
+</main>
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-row"><p>GameRemote. Your console, your screen.</p><nav aria-label="Footer navigation"><a href="support.html#contact">Contact</a><a href="privacy.html">Privacy policy</a><a href="open-source.html">Open-source credits</a></nav></div>
+    <p class="legal-line">Developed by AHMED TAHA A A ALSAUXHY. An unofficial remote-play client, not endorsed or certified by Sony Interactive Entertainment LLC. PlayStation, PS5 and PS4 are trademarks of their respective owners.</p>
+  </div>
+</footer>
+</body>
+</html>

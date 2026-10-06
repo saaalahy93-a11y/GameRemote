@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /GameRemote/
+Sitemap: https://saaalahy93-a11y.github.io/GameRemote/sitemap.xml
