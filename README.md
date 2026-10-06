@@ -2,12 +2,13 @@
 
 An open-source, unofficial remote-play client for your own PlayStation console.
 
-GameRemote for iPhone, iPad and Mac is being prepared for release. There is no public store download yet. This repository hosts the support website and the reviewed iOS source candidate in [ios-source](ios-source/README.md). It does not contain private build history or publisher signing material.
+GameRemote for iPhone, iPad and Mac is being prepared for release. There is no public store download yet. This repository hosts the support website, the reviewed iOS source candidate in [ios-source](ios-source/README.md), and the Mac source releases linked below. It does not contain private build history or publisher signing material.
 
 - [Website](https://saaalahy93-a11y.github.io/GameRemote/)
 - [Setup and support](https://saaalahy93-a11y.github.io/GameRemote/support.html)
 - [Privacy information](https://saaalahy93-a11y.github.io/GameRemote/privacy.html)
 - [Build the iOS source candidate](ios-source/BUILDING-iOS.md)
+- [Mac Build17 application and dependency source](https://github.com/saaalahy93-a11y/GameRemote/releases/tag/macos-1.10.0-build17-source-r1)
 - [Source and licence information](https://saaalahy93-a11y.github.io/GameRemote/open-source.html)
 
 Support: saaaalahy@icloud.com. Do not include pairing codes, Account IDs, console keys or PSN tokens in public issues or support messages.
