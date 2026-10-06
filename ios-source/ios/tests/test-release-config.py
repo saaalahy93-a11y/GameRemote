@@ -161,6 +161,19 @@ class ReleaseConfigurationTests(unittest.TestCase):
                 self.assertNotIn("@CHIAKI_IOS_", text)
                 self.assertNotIn("@GR_IOS_", text)
 
+    def test_deferred_store_declaration_passes_preflight_and_omits_encryption_keys(self):
+        values = {**VALID, "EXPORT_CLASSIFICATION": "defer-to-app-store-connect"}
+        result = self.preflight(values)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        config = ReleaseConfig(values, store=True)
+        result = self.render(config)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        plist = self.path / "GameRemote-Info.plist"
+        config.verify_plist(plist)
+        info = plistlib.loads(plist.read_bytes())
+        self.assertNotIn("ITSAppUsesNonExemptEncryption", info)
+        self.assertNotIn("ITSEncryptionExportComplianceCode", info)
+
     def test_cmake_rejects_incomplete_release_before_creating_plist(self):
         config = ReleaseConfig.from_environment(store=True, environment={})
         result = self.render(config)
@@ -307,6 +320,27 @@ class ReleaseConfigurationTests(unittest.TestCase):
             store_archive.create_archive(self.path / "development", self.archive_root, self.signing, "development")
         configure = next(command for command in commands if command[0] == "cmake")
         self.assertIn("-DCHIAKI_IOS_STORE_RELEASE=OFF", configure)
+
+    def test_deferred_store_archive_passes_mode_to_cmake_and_verifies_omitted_key(self):
+        values = {**VALID, "EXPORT_CLASSIFICATION": "defer-to-app-store-connect"}
+        commands = []
+        runner = self.archive_runner(commands)
+
+        def run(command, **kwargs):
+            result = runner(command, **kwargs)
+            if command[0] == "xcodebuild":
+                info_path = Path(command[command.index("-archivePath") + 1]) / "Products/Applications/GameRemote.app/Info.plist"
+                info = plistlib.loads(info_path.read_bytes())
+                info.pop("ITSAppUsesNonExemptEncryption")
+                info_path.write_bytes(plistlib.dumps(info))
+            return result
+
+        with (patch.dict(os.environ, self.configured_environment(values), clear=True),
+              patch.object(store_archive.subprocess, "run", side_effect=run)):
+            archive = store_archive.create_archive(self.path / "deferred", self.archive_root, self.signing)
+        configure = next(command for command in commands if command[0] == "cmake")
+        self.assertIn("-DCHIAKI_IOS_EXPORT_CLASSIFICATION=defer-to-app-store-connect", configure)
+        ReleaseConfig(values, store=True).verify_plist(archive / "Products/Applications/GameRemote.app/Info.plist")
 
     def test_archive_rejects_implicit_signing_and_unbounded_jobs_before_commands(self):
         environment = self.configured_environment()

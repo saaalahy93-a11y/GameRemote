@@ -1,0 +1,31 @@
+{
+  "outer_metadata_finalization": {
+    "checksum_file_regenerated": true,
+    "files": {
+      "PACKAGING-STATE.json": {
+        "after_sha256": "40104f176f54c88df7a4ff1e9b1463e2a92937c4c6bc955ef6375e10bfe88d02",
+        "before_sha256": "bbd00c926799d6c21cda822edf808be8a5e85c1b6410f6b7e7b0aa3632da4d2e"
+      },
+      "README.md": {
+        "after_sha256": "6a34e02e98aad1e213da609bd22d5ae7c6d8b9ecdb99bbf9ee666d5c11122971",
+        "before_sha256": "29acb55c39b176feb405c312c3f9315e107eefea7b84038237490d58f6f53efb"
+      },
+      "source-verification.json": {
+        "after_sha256": "ebbacc217f35da3a3a3cba164b0bd12157dc63a8d7d172bd008182665a15779f",
+        "before_sha256": "4d0960c205bc241f34cffad35732b99883055c4804788dc86c3df8784896b1d5"
+      }
+    },
+    "scope": "Only the pending-review status, review links and independent review evidence changed. The sealed archive and all source/dependency bytes remain unchanged."
+  },
+  "review": {
+    "archive_sha256": "099ba9a2ef2badcee89f3f696e72c356c32f1aff18d607e3adc1cb1789478fb9",
+    "decision": "APPROVE",
+    "evidence_logs": [
+      "work/logs/20261006-143947-axjg0muv.log",
+      "work/logs/20261006-144013-3dy6pibg.log"
+    ],
+    "findings": [],
+    "reviewer": "ios_build_patch_review",
+    "scope": "Sealed r2 archive, exact six-file reviewed source delta, unchanged-member proof and packaging-document delta. No native build or legal distribution attestation."
+  }
+}

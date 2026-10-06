@@ -88,6 +88,9 @@ def sign_and_export(output, mode, identity, state):
               "build": config.values["BUILD_NUMBER"], "sha256": hashlib.sha256(ipa.read_bytes()).hexdigest(),
               "xcode": "26.3", "sdk": "26.2", "source_commit": native(["git", "-C", str(ROOT), "rev-parse", "HEAD"]).stdout.strip(),
               "verified": ["metadata", "signature", "signing-certificate", "profile", "entitlements", "arm64-ios", "resources"],
+              "export_classification": config.values["EXPORT_CLASSIFICATION"],
+              "export_declaration_pending": config.values["EXPORT_CLASSIFICATION"] not in {"exempt", "non-exempt"},
+              "submission_ready": False,
               "uploaded_to_apple": False}
     (deliverables / "verification.json").write_text(json.dumps(report, indent=2) + "\n")
     return ipa

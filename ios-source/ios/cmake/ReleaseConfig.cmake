@@ -16,8 +16,8 @@ set(CHIAKI_IOS_BUILD_NUMBER "${_gr_build_default}" CACHE STRING "App Store build
 set(CHIAKI_IOS_PRIVACY_URL "" CACHE STRING "Public HTTPS privacy policy URL")
 set(CHIAKI_IOS_SUPPORT_URL "" CACHE STRING "Public HTTPS support URL")
 set(CHIAKI_IOS_SOURCE_URL "" CACHE STRING "Public HTTPS corresponding-source URL for this exact build")
-set(CHIAKI_IOS_EXPORT_CLASSIFICATION "" CACHE STRING "Final owner determination: exempt or non-exempt")
-set_property(CACHE CHIAKI_IOS_EXPORT_CLASSIFICATION PROPERTY STRINGS "" exempt non-exempt)
+set(CHIAKI_IOS_EXPORT_CLASSIFICATION "" CACHE STRING "Export declaration: exempt, non-exempt, or defer-to-app-store-connect")
+set_property(CACHE CHIAKI_IOS_EXPORT_CLASSIFICATION PROPERTY STRINGS "" exempt non-exempt defer-to-app-store-connect)
 
 if(PYTHON_EXECUTABLE)
   set(_gr_metadata_python "${PYTHON_EXECUTABLE}")
@@ -55,6 +55,8 @@ foreach(field PRIVACY_URL SUPPORT_URL SOURCE_URL)
   # Keep URL @ characters as XML entities until the final plist is parsed.
   string(REPLACE "@" "&#64;" CHIAKI_IOS_${field}_XML "${CHIAKI_IOS_${field}_XML}")
 endforeach()
+# Explicit deferral leaves both encryption keys absent for Apple's upload questionnaire.
+# An unspecified development build also omits the key; store input cannot be empty.
 set(GR_IOS_EXPORT_PLIST_ENTRY "")
 if(CHIAKI_IOS_EXPORT_CLASSIFICATION STREQUAL "exempt")
   set(GR_IOS_EXPORT_PLIST_ENTRY "<key>ITSAppUsesNonExemptEncryption</key><false/>")

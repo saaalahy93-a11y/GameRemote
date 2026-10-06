@@ -1,0 +1,238 @@
+diff --git a/.github/workflows/ios-signing-export.yml b/.github/workflows/ios-signing-export.yml
+--- a/.github/workflows/ios-signing-export.yml
++++ b/.github/workflows/ios-signing-export.yml
+@@ -43,6 +43,7 @@
+       GR_IOS_PRIVACY_URL: ${{ vars.GR_IOS_PRIVACY_URL }}
+       GR_IOS_SUPPORT_URL: ${{ vars.GR_IOS_SUPPORT_URL }}
+       GR_IOS_SOURCE_URL: ${{ vars.GR_IOS_SOURCE_URL }}
++      # Explicit choice: exempt, non-exempt, or defer-to-app-store-connect (questionnaire pending).
+       GR_IOS_EXPORT_CLASSIFICATION: ${{ vars.GR_IOS_EXPORT_CLASSIFICATION }}
+       GR_IOS_SIGNING_IDENTITY: ${{ vars.GR_IOS_SIGNING_IDENTITY }}
+     steps:
+diff --git a/docs/release/ios-store-profile.md b/docs/release/ios-store-profile.md
+--- a/docs/release/ios-store-profile.md
++++ b/docs/release/ios-store-profile.md
+@@ -1,6 +1,6 @@
+ # iOS manual signing and local IPA export
+ 
+-The owner has confirmed Apple team `4J27D8LXNK` and registered app identifier `com.ahmedalsalahy.gameremote`. The signing workflow uses those public identifiers. Version, build number, public URLs and the app's final export classification remain explicit owner inputs; this repository supplies no production URL or export answer.
++The owner has confirmed Apple team `4J27D8LXNK` and registered app identifier `com.ahmedalsalahy.gameremote`. The signing workflow uses those public identifiers. Version, build number, public URLs and the app's export-declaration mode remain explicit owner inputs; this repository supplies no production URL or export answer.
+ 
+ `ios/scripts/sign-and-export.py` validates public configuration by default. Signing requires `--execute-signing`. The manual workflow is disabled by default and has no push, pull-request, scheduled or reusable trigger. Its export destination is always `export`: neither helper nor workflow uploads to App Store Connect or TestFlight, creates Apple credentials, or requests provisioning updates. The owner must separately authorize signing-secret setup and the hosted job before dispatching it.
+ 
+@@ -19,11 +19,11 @@
+ | `GR_IOS_PRIVACY_URL` | Public HTTPS policy covering this app and its final data practices; required for store export |
+ | `GR_IOS_SUPPORT_URL` | Public HTTPS support page with the publisher's maintained contact route; required for store export |
+ | `GR_IOS_SOURCE_URL` | Public HTTPS location providing the corresponding source for this exact distributed build; required for store export |
+-| `GR_IOS_EXPORT_CLASSIFICATION` | Owner's final `exempt` or `non-exempt` determination for the complete app's encryption; required for store export |
++| `GR_IOS_EXPORT_CLASSIFICATION` | `exempt`, `non-exempt`, or explicit `defer-to-app-store-connect`; required for store export |
+ 
+ The validator rejects malformed values, placeholder/local hosts, IP endpoints, URL credentials and unresolved substitutions. Nonempty development links must also pass validation. These are syntax checks; they do not establish ownership, availability, policy accuracy or complete corresponding source. Settings and help expose configured links through the existing generated Info.plist.
+ 
+-This app includes protocol cryptography as well as HTTPS. Do not infer its export answer from HTTPS alone. `exempt` writes `ITSAppUsesNonExemptEncryption=false`; `non-exempt` writes `true`. No answer is inferred, and no `ITSEncryptionExportComplianceCode` is invented. Complete any required documentation for the final candidate before submission. See [Apple's export-compliance key guidance](https://help.apple.com/xcode/mac/current/en.lproj/dev0dc15d044.html).
++This app includes protocol cryptography as well as HTTPS. Do not infer its export answer from HTTPS alone. `exempt` writes `ITSAppUsesNonExemptEncryption=false`; `non-exempt` writes `true`. `defer-to-app-store-connect` deliberately omits that key and `ITSEncryptionExportComplianceCode`, leaving the declaration pending for App Store Connect's questionnaire after upload. It permits local archive/export without asserting an exemption or inventing a compliance code. Archive and IPA verification reject either key if present in deferred mode. Missing or unrecognized store values remain errors. [Apple documents this omission and questionnaire behavior](https://developer.apple.com/documentation/bundleresources/information-property-list/itsappusesnonexemptencryption). Complete the questionnaire and any required documentation for the final candidate before submission.
+ 
+ ## Configuration-only checks
+ 
+@@ -84,7 +84,7 @@
+ 
+ Both the archive and exported app are checked for configured Info.plist values, device platform, executable, assets, privacy manifest and licence notices. The stronger export path verifies the full code signature, team and signed team entitlement, app identifier, mode entitlements, selected certificate fingerprint, embedded profile UUID and validity, arm64 architecture and iOS Mach-O platform. The IPA must have exactly `Payload/GameRemote.app`; unsafe, duplicate and symlink archive entries and excessive expansion are rejected. Case and Unicode filename aliases, including implicit ancestor directories, are rejected before extraction.
+ 
+-Only after validation **and cleanup** succeed does the helper create `deliverables/GameRemote.ipa` and `deliverables/verification.json`. The report contains public release identity/version, checkout HEAD commit, SHA-256, toolchain, completed verification categories and `uploaded_to_apple=false`. The `source_commit` field records checkout HEAD; it does not attest uncommitted local edits. The hosted path uses a fresh checkout of the selected workflow ref. The workflow retains only those two files for seven days, accessible to readers of the private repository. The signed app necessarily embeds its provisioning profile: artifact access includes the app and its embedded profile metadata, which can include team/certificate details and development device identifiers. No standalone profile or credential log is retained.
++Only after validation **and cleanup** succeed does the helper create `deliverables/GameRemote.ipa` and `deliverables/verification.json`. The report contains public release identity/version, checkout HEAD commit, SHA-256, toolchain, completed verification categories and `uploaded_to_apple=false`. It records the chosen `export_classification`; `export_declaration_pending=true` for deferred or unspecified development declarations. `submission_ready` is always `false`: local verification does not establish App Store submission readiness. The `source_commit` field records checkout HEAD; it does not attest uncommitted local edits. The hosted path uses a fresh checkout of the selected workflow ref. The workflow retains only those two files for seven days, accessible to readers of the private repository. The signed app necessarily embeds its provisioning profile: artifact access includes the app and its embedded profile metadata, which can include team/certificate details and development device identifiers. No standalone profile or credential log is retained.
+ 
+ ## Verification boundary and source references
+ 
+diff --git a/ios/cmake/ReleaseConfig.cmake b/ios/cmake/ReleaseConfig.cmake
+--- a/ios/cmake/ReleaseConfig.cmake
++++ b/ios/cmake/ReleaseConfig.cmake
+@@ -16,8 +16,8 @@
+ set(CHIAKI_IOS_PRIVACY_URL "" CACHE STRING "Public HTTPS privacy policy URL")
+ set(CHIAKI_IOS_SUPPORT_URL "" CACHE STRING "Public HTTPS support URL")
+ set(CHIAKI_IOS_SOURCE_URL "" CACHE STRING "Public HTTPS corresponding-source URL for this exact build")
+-set(CHIAKI_IOS_EXPORT_CLASSIFICATION "" CACHE STRING "Final owner determination: exempt or non-exempt")
+-set_property(CACHE CHIAKI_IOS_EXPORT_CLASSIFICATION PROPERTY STRINGS "" exempt non-exempt)
++set(CHIAKI_IOS_EXPORT_CLASSIFICATION "" CACHE STRING "Export declaration: exempt, non-exempt, or defer-to-app-store-connect")
++set_property(CACHE CHIAKI_IOS_EXPORT_CLASSIFICATION PROPERTY STRINGS "" exempt non-exempt defer-to-app-store-connect)
+ 
+ if(PYTHON_EXECUTABLE)
+   set(_gr_metadata_python "${PYTHON_EXECUTABLE}")
+@@ -55,6 +55,8 @@
+   # Keep URL @ characters as XML entities until the final plist is parsed.
+   string(REPLACE "@" "&#64;" CHIAKI_IOS_${field}_XML "${CHIAKI_IOS_${field}_XML}")
+ endforeach()
++# Explicit deferral leaves both encryption keys absent for Apple's upload questionnaire.
++# An unspecified development build also omits the key; store input cannot be empty.
+ set(GR_IOS_EXPORT_PLIST_ENTRY "")
+ if(CHIAKI_IOS_EXPORT_CLASSIFICATION STREQUAL "exempt")
+   set(GR_IOS_EXPORT_PLIST_ENTRY "<key>ITSAppUsesNonExemptEncryption</key><false/>")
+diff --git a/ios/scripts/release_config.py b/ios/scripts/release_config.py
+--- a/ios/scripts/release_config.py
++++ b/ios/scripts/release_config.py
+@@ -92,8 +92,8 @@
+             if value and not is_public_https_url(value):
+                 errors.append(field + " must be an absolute public HTTPS URL without credentials or placeholders")
+         classification = self.values["EXPORT_CLASSIFICATION"]
+-        if classification and classification not in {"exempt", "non-exempt"}:
+-            errors.append("EXPORT_CLASSIFICATION must be the owner's final 'exempt' or 'non-exempt' determination")
++        if classification and classification not in {"exempt", "non-exempt", "defer-to-app-store-connect"}:
++            errors.append("EXPORT_CLASSIFICATION must be 'exempt', 'non-exempt', or explicit 'defer-to-app-store-connect'")
+         if errors:
+             raise ValueError("\n".join(errors))
+ 
+@@ -115,7 +115,11 @@
+             if info.get(key) != value:
+                 raise ValueError("Archive Info.plist does not match configured " + key)
+         classification = self.values["EXPORT_CLASSIFICATION"]
+-        if classification and info.get("ITSAppUsesNonExemptEncryption") is not (classification == "non-exempt"):
++        if classification == "defer-to-app-store-connect":
++            for key in ("ITSAppUsesNonExemptEncryption", "ITSEncryptionExportComplianceCode"):
++                if key in info:
++                    raise ValueError("Deferred export declaration must omit " + key)
++        elif classification and info.get("ITSAppUsesNonExemptEncryption") is not (classification == "non-exempt"):
+             raise ValueError("Archive export classification does not match the final owner input")
+ 
+ 
+diff --git a/ios/scripts/sign-and-export.py b/ios/scripts/sign-and-export.py
+--- a/ios/scripts/sign-and-export.py
++++ b/ios/scripts/sign-and-export.py
+@@ -88,6 +88,9 @@
+               "build": config.values["BUILD_NUMBER"], "sha256": hashlib.sha256(ipa.read_bytes()).hexdigest(),
+               "xcode": "26.3", "sdk": "26.2", "source_commit": native(["git", "-C", str(ROOT), "rev-parse", "HEAD"]).stdout.strip(),
+               "verified": ["metadata", "signature", "signing-certificate", "profile", "entitlements", "arm64-ios", "resources"],
++              "export_classification": config.values["EXPORT_CLASSIFICATION"],
++              "export_declaration_pending": config.values["EXPORT_CLASSIFICATION"] not in {"exempt", "non-exempt"},
++              "submission_ready": False,
+               "uploaded_to_apple": False}
+     (deliverables / "verification.json").write_text(json.dumps(report, indent=2) + "\n")
+     return ipa
+diff --git a/ios/tests/test-release-config.py b/ios/tests/test-release-config.py
+--- a/ios/tests/test-release-config.py
++++ b/ios/tests/test-release-config.py
+@@ -161,6 +161,19 @@
+                 self.assertNotIn("@CHIAKI_IOS_", text)
+                 self.assertNotIn("@GR_IOS_", text)
+ 
++    def test_deferred_store_declaration_passes_preflight_and_omits_encryption_keys(self):
++        values = {**VALID, "EXPORT_CLASSIFICATION": "defer-to-app-store-connect"}
++        result = self.preflight(values)
++        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
++        config = ReleaseConfig(values, store=True)
++        result = self.render(config)
++        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
++        plist = self.path / "GameRemote-Info.plist"
++        config.verify_plist(plist)
++        info = plistlib.loads(plist.read_bytes())
++        self.assertNotIn("ITSAppUsesNonExemptEncryption", info)
++        self.assertNotIn("ITSEncryptionExportComplianceCode", info)
++
+     def test_cmake_rejects_incomplete_release_before_creating_plist(self):
+         config = ReleaseConfig.from_environment(store=True, environment={})
+         result = self.render(config)
+@@ -308,6 +321,27 @@
+         configure = next(command for command in commands if command[0] == "cmake")
+         self.assertIn("-DCHIAKI_IOS_STORE_RELEASE=OFF", configure)
+ 
++    def test_deferred_store_archive_passes_mode_to_cmake_and_verifies_omitted_key(self):
++        values = {**VALID, "EXPORT_CLASSIFICATION": "defer-to-app-store-connect"}
++        commands = []
++        runner = self.archive_runner(commands)
++
++        def run(command, **kwargs):
++            result = runner(command, **kwargs)
++            if command[0] == "xcodebuild":
++                info_path = Path(command[command.index("-archivePath") + 1]) / "Products/Applications/GameRemote.app/Info.plist"
++                info = plistlib.loads(info_path.read_bytes())
++                info.pop("ITSAppUsesNonExemptEncryption")
++                info_path.write_bytes(plistlib.dumps(info))
++            return result
++
++        with (patch.dict(os.environ, self.configured_environment(values), clear=True),
++              patch.object(store_archive.subprocess, "run", side_effect=run)):
++            archive = store_archive.create_archive(self.path / "deferred", self.archive_root, self.signing)
++        configure = next(command for command in commands if command[0] == "cmake")
++        self.assertIn("-DCHIAKI_IOS_EXPORT_CLASSIFICATION=defer-to-app-store-connect", configure)
++        ReleaseConfig(values, store=True).verify_plist(archive / "Products/Applications/GameRemote.app/Info.plist")
++
+     def test_archive_rejects_implicit_signing_and_unbounded_jobs_before_commands(self):
+         environment = self.configured_environment()
+         with patch.dict(os.environ, environment, clear=True), patch.object(store_archive.subprocess, "run") as run:
+diff --git a/ios/tests/test_apple_signing.py b/ios/tests/test_apple_signing.py
+--- a/ios/tests/test_apple_signing.py
++++ b/ios/tests/test_apple_signing.py
+@@ -81,7 +81,7 @@
+                 "CFBundleShortVersionString": config.values["VERSION"], "CFBundleExecutable": "GameRemote",
+                 "CFBundleSupportedPlatforms": ["iPhoneOS"],
+                 **{key: config.values[field] for field, key in URL_PLIST_KEYS.items()}}
+-        if config.values["EXPORT_CLASSIFICATION"]:
++        if config.values["EXPORT_CLASSIFICATION"] in {"exempt", "non-exempt"}:
+             info["ITSAppUsesNonExemptEncryption"] = config.values["EXPORT_CLASSIFICATION"] == "non-exempt"
+         (app / "Info.plist").write_bytes(plistlib.dumps(info))
+         for name in ("GameRemote", "Assets.car", "PrivacyInfo.xcprivacy", "AGPL-3.0-only-OpenSSL.txt",
+@@ -365,6 +365,22 @@
+             with self.subTest(mode=mode), patch.object(signing, "native", side_effect=self.native_app(config)):
+                 signing.verify_ipa(self.ipa(self.app(config)), config, self.manual)
+ 
++    def test_deferred_store_ipa_accepts_omission_and_rejects_either_encryption_key(self):
++        config = signing.public_config("store", {**STORE, "GR_IOS_EXPORT_CLASSIFICATION": "defer-to-app-store-connect"})
++        app = self.app(config)
++        with patch.object(signing, "native", side_effect=self.native_app(config)):
++            signing.verify_ipa(self.ipa(app), config, self.manual)
++        for key, value in (("ITSAppUsesNonExemptEncryption", True), ("ITSAppUsesNonExemptEncryption", False),
++                           ("ITSEncryptionExportComplianceCode", ""), ("ITSEncryptionExportComplianceCode", "invented")):
++            app = self.app(config)
++            info = plistlib.loads((app / "Info.plist").read_bytes())
++            info[key] = value
++            (app / "Info.plist").write_bytes(plistlib.dumps(info))
++            with self.subTest(key=key, value=value), patch.object(signing, "native") as native:
++                with self.assertRaisesRegex(ValueError, "Deferred export declaration must omit " + key):
++                    signing.verify_ipa(self.ipa(app), config, self.manual)
++                native.assert_not_called()
++
+     def test_ipa_rejects_traversal_symlink_duplicate_and_extra_app(self):
+         for name, mode in (("../escape", 0o100644), ("/absolute", 0o100644), ("Payload/link", 0o120777),
+                            ("Payload/Other.app/Info.plist", 0o100644), ("Payload/GameRemote.app/./Info.plist", 0o100644)):
+@@ -450,8 +466,12 @@
+             exporter.pinned_toolchain()
+ 
+     def test_export_releases_deliverables_only_after_validation_and_cleanup(self):
+-        for failure in (None, "verification", "cleanup", "export"):
+-            output = self.path / (failure or "success")
++        cases = [("development", PUBLIC, failure) for failure in (None, "verification", "cleanup", "export")]
++        cases += [("store", {**STORE, "GR_IOS_EXPORT_CLASSIFICATION": declaration}, None)
++                  for declaration in ("exempt", "non-exempt", "defer-to-app-store-connect")]
++        for mode, environment, failure in cases:
++            declaration = environment.get("GR_IOS_EXPORT_CLASSIFICATION", "")
++            output = self.path / (mode + "-" + declaration + "-" + (failure or "success"))
+             events = []
+ 
+             @contextmanager
+@@ -488,21 +508,25 @@
+                 if failure == "verification":
+                     raise ValueError("synthetic validation failure")
+ 
+-            with (self.subTest(failure=failure), patch.dict(os.environ, {**PUBLIC, **SECRETS}, clear=True),
++            with (self.subTest(mode=mode, declaration=declaration, failure=failure),
++                  patch.dict(os.environ, {**environment, **SECRETS}, clear=True),
+                   patch.object(exporter, "pinned_toolchain"), patch.object(exporter, "temporary_signing", temporary),
+                   patch.object(exporter, "verify_signed_app"), patch.object(exporter, "bounded_phase", run_phase),
+                   patch.object(exporter, "verify_ipa", verify),
+                   patch.object(exporter, "native", return_value=subprocess.CompletedProcess([], 0, "fixturecommit", ""))):
+                 if failure:
+                     with self.assertRaises((ValueError, RuntimeError, subprocess.CalledProcessError)):
+-                        exporter.sign_and_export(output, "development", IDENTITY, self.state)
++                        exporter.sign_and_export(output, mode, IDENTITY, self.state)
+                     self.assertFalse((output / "deliverables").exists())
+                 else:
+-                    ipa = exporter.sign_and_export(output, "development", IDENTITY, self.state)
++                    ipa = exporter.sign_and_export(output, mode, IDENTITY, self.state)
+                     self.assertEqual(events, ["setup", "verify", "cleanup"])
+                     self.assertEqual({path.name for path in ipa.parent.iterdir()}, {"GameRemote.ipa", "verification.json"})
+                     report = json.loads((ipa.parent / "verification.json").read_text())
+                     self.assertFalse(report["uploaded_to_apple"])
++                    self.assertEqual(report["export_classification"], declaration)
++                    self.assertEqual(report["export_declaration_pending"], declaration not in {"exempt", "non-exempt"})
++                    self.assertFalse(report["submission_ready"])
+                     self.assertEqual(report["sha256"], hashlib.sha256(ipa.read_bytes()).hexdigest())
+                 self.assertIn("cleanup", events)
+ 

@@ -92,8 +92,8 @@ class ReleaseConfig:
             if value and not is_public_https_url(value):
                 errors.append(field + " must be an absolute public HTTPS URL without credentials or placeholders")
         classification = self.values["EXPORT_CLASSIFICATION"]
-        if classification and classification not in {"exempt", "non-exempt"}:
-            errors.append("EXPORT_CLASSIFICATION must be the owner's final 'exempt' or 'non-exempt' determination")
+        if classification and classification not in {"exempt", "non-exempt", "defer-to-app-store-connect"}:
+            errors.append("EXPORT_CLASSIFICATION must be 'exempt', 'non-exempt', or explicit 'defer-to-app-store-connect'")
         if errors:
             raise ValueError("\n".join(errors))
 
@@ -115,7 +115,11 @@ class ReleaseConfig:
             if info.get(key) != value:
                 raise ValueError("Archive Info.plist does not match configured " + key)
         classification = self.values["EXPORT_CLASSIFICATION"]
-        if classification and info.get("ITSAppUsesNonExemptEncryption") is not (classification == "non-exempt"):
+        if classification == "defer-to-app-store-connect":
+            for key in ("ITSAppUsesNonExemptEncryption", "ITSEncryptionExportComplianceCode"):
+                if key in info:
+                    raise ValueError("Deferred export declaration must omit " + key)
+        elif classification and info.get("ITSAppUsesNonExemptEncryption") is not (classification == "non-exempt"):
             raise ValueError("Archive export classification does not match the final owner input")
 
 

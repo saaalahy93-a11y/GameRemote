@@ -1,0 +1,71 @@
+{
+  "status": "REVIEWED_AND_INTEGRATED",
+  "at": "2026-10-06T18:00:49.071879+00:00",
+  "patch_sha256": "421aecde02b408e27de86becb0815fbcaa3d987f982e1333887e7b93176b723a",
+  "manifest_sha256": "713859f1ce700ea80b6097c31d8550bcabd6d724d0a8474458233726729aa053",
+  "review": "ios_build_patch_review APPROVE no findings",
+  "review_log": "work/logs/20261006-185938-kch2xd73.log",
+  "files": [
+    {
+      "file": ".github/workflows/ios-signing-export.yml",
+      "base_sha256": "9d44f5b86797cb1cbdaf57d01ec4666a6e1f4dc497a9c2a5572802a5a9b60652",
+      "expected_integrated_sha256": "dcfa4cfb107b227dbeffd2b0d2a696c7697bc4201b8eeb6d0ba918c2ae162620",
+      "bytes": 5072
+    },
+    {
+      "file": "docs/release/ios-store-profile.md",
+      "base_sha256": "4c7eb11700c05c304421a3a4699a71a3c7a254c4024ce169a10c26060db570c0",
+      "expected_integrated_sha256": "948f89e64388e6b1721a6f127bc6cd1e802138eda00022e15e3b4cbd2f0fdde1",
+      "bytes": 16496
+    },
+    {
+      "file": "ios/cmake/ReleaseConfig.cmake",
+      "base_sha256": "64377366256def89ceb779196b38fdbd64f9bf61d6d135bca9653933ec8ec0fd",
+      "expected_integrated_sha256": "26978440c855a548da046b8cc5b53ca3d2814bdb5a8eda0a179be972ba711f70",
+      "bytes": 3774
+    },
+    {
+      "file": "ios/scripts/release_config.py",
+      "base_sha256": "ac9655f1dd6d118fc1532ae084164552304bfc385658f1cdf4dadaef088f4a30",
+      "expected_integrated_sha256": "59518139be6463bc927d9d04129056f3d273bfa533b526a47315f6639d3b5eac",
+      "bytes": 7030
+    },
+    {
+      "file": "ios/scripts/sign-and-export.py",
+      "base_sha256": "9c7b53ea7f8010df98dee5cd94a9632d4d99f32d9d4c43b0ee8c84216b123852",
+      "expected_integrated_sha256": "84f4544884bc3624a61b9841618016187654f6ca58e4cdc7a078f2e74123e816",
+      "bytes": 7275
+    },
+    {
+      "file": "ios/tests/test-release-config.py",
+      "base_sha256": "1019ab6e98736e48b0668a0afafa92258fb7f7a16027b84b063ba4166e80a104",
+      "expected_integrated_sha256": "2d6b957505719d811e1f30c33918c057da0f699ef78169fba16bc952dd9b7aad",
+      "bytes": 23961
+    },
+    {
+      "file": "ios/tests/test_apple_signing.py",
+      "base_sha256": "0fbe745d856efc47ebd35893dce055a98653f2bcfef4db2cb5708c01a5a768dd",
+      "expected_integrated_sha256": "cee89d3f5b27d496fbf49015b12df0386c9c392f88eab1ce0c3187cce2a33767",
+      "bytes": 39992
+    }
+  ],
+  "unchanged_consumers": {
+    "ios/App/Info.plist.in": "b4207cacad9d9c3fcb3b36ee7a1896a6d3e3f27fe46169471e8175c2a617239b",
+    "ios/scripts/store-archive.py": "8d9563a492df91def15889a627d2031fff321b340860aadd339d1b5d0808ba3f",
+    "ios/scripts/apple_signing.py": "414631c00959beffe9a5b0bea5b10385bd0dab345278c911c5b915f21d2e44f9"
+  },
+  "tests_reused": {
+    "release_config_five_tests": "work/logs/20261006-185702-i6i446_k.log",
+    "signing_three_tests": "work/logs/20261006-185702-qmzkf9v4.log",
+    "ruff_E4_E7_E9_F": "work/logs/20261006-185702-l5zykz_6.log",
+    "expected_before_failures": [
+      "work/logs/20261006-185604-x7wstoqi.log",
+      "work/logs/20261006-185604-ea6mvpsh.log"
+    ]
+  },
+  "official_source": "https://developer.apple.com/documentation/bundleresources/information-property-list/itsappusesnonexemptencryption",
+  "native_build": false,
+  "export_classification": "defer-to-app-store-connect",
+  "legal_declaration_made": false,
+  "scope": "Explicit permitted omission for upload questionnaire; all encryption answers remain pending; unrelated source and accepted binaries unchanged."
+}

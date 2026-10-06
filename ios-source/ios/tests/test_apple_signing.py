@@ -81,7 +81,7 @@ class SigningTests(unittest.TestCase):
                 "CFBundleShortVersionString": config.values["VERSION"], "CFBundleExecutable": "GameRemote",
                 "CFBundleSupportedPlatforms": ["iPhoneOS"],
                 **{key: config.values[field] for field, key in URL_PLIST_KEYS.items()}}
-        if config.values["EXPORT_CLASSIFICATION"]:
+        if config.values["EXPORT_CLASSIFICATION"] in {"exempt", "non-exempt"}:
             info["ITSAppUsesNonExemptEncryption"] = config.values["EXPORT_CLASSIFICATION"] == "non-exempt"
         (app / "Info.plist").write_bytes(plistlib.dumps(info))
         for name in ("GameRemote", "Assets.car", "PrivacyInfo.xcprivacy", "AGPL-3.0-only-OpenSSL.txt",
@@ -365,6 +365,22 @@ class SigningTests(unittest.TestCase):
             with self.subTest(mode=mode), patch.object(signing, "native", side_effect=self.native_app(config)):
                 signing.verify_ipa(self.ipa(self.app(config)), config, self.manual)
 
+    def test_deferred_store_ipa_accepts_omission_and_rejects_either_encryption_key(self):
+        config = signing.public_config("store", {**STORE, "GR_IOS_EXPORT_CLASSIFICATION": "defer-to-app-store-connect"})
+        app = self.app(config)
+        with patch.object(signing, "native", side_effect=self.native_app(config)):
+            signing.verify_ipa(self.ipa(app), config, self.manual)
+        for key, value in (("ITSAppUsesNonExemptEncryption", True), ("ITSAppUsesNonExemptEncryption", False),
+                           ("ITSEncryptionExportComplianceCode", ""), ("ITSEncryptionExportComplianceCode", "invented")):
+            app = self.app(config)
+            info = plistlib.loads((app / "Info.plist").read_bytes())
+            info[key] = value
+            (app / "Info.plist").write_bytes(plistlib.dumps(info))
+            with self.subTest(key=key, value=value), patch.object(signing, "native") as native:
+                with self.assertRaisesRegex(ValueError, "Deferred export declaration must omit " + key):
+                    signing.verify_ipa(self.ipa(app), config, self.manual)
+                native.assert_not_called()
+
     def test_ipa_rejects_traversal_symlink_duplicate_and_extra_app(self):
         for name, mode in (("../escape", 0o100644), ("/absolute", 0o100644), ("Payload/link", 0o120777),
                            ("Payload/Other.app/Info.plist", 0o100644), ("Payload/GameRemote.app/./Info.plist", 0o100644)):
@@ -450,8 +466,12 @@ class SigningTests(unittest.TestCase):
             exporter.pinned_toolchain()
 
     def test_export_releases_deliverables_only_after_validation_and_cleanup(self):
-        for failure in (None, "verification", "cleanup", "export"):
-            output = self.path / (failure or "success")
+        cases = [("development", PUBLIC, failure) for failure in (None, "verification", "cleanup", "export")]
+        cases += [("store", {**STORE, "GR_IOS_EXPORT_CLASSIFICATION": declaration}, None)
+                  for declaration in ("exempt", "non-exempt", "defer-to-app-store-connect")]
+        for mode, environment, failure in cases:
+            declaration = environment.get("GR_IOS_EXPORT_CLASSIFICATION", "")
+            output = self.path / (mode + "-" + declaration + "-" + (failure or "success"))
             events = []
 
             @contextmanager
@@ -488,21 +508,25 @@ class SigningTests(unittest.TestCase):
                 if failure == "verification":
                     raise ValueError("synthetic validation failure")
 
-            with (self.subTest(failure=failure), patch.dict(os.environ, {**PUBLIC, **SECRETS}, clear=True),
+            with (self.subTest(mode=mode, declaration=declaration, failure=failure),
+                  patch.dict(os.environ, {**environment, **SECRETS}, clear=True),
                   patch.object(exporter, "pinned_toolchain"), patch.object(exporter, "temporary_signing", temporary),
                   patch.object(exporter, "verify_signed_app"), patch.object(exporter, "bounded_phase", run_phase),
                   patch.object(exporter, "verify_ipa", verify),
                   patch.object(exporter, "native", return_value=subprocess.CompletedProcess([], 0, "fixturecommit", ""))):
                 if failure:
                     with self.assertRaises((ValueError, RuntimeError, subprocess.CalledProcessError)):
-                        exporter.sign_and_export(output, "development", IDENTITY, self.state)
+                        exporter.sign_and_export(output, mode, IDENTITY, self.state)
                     self.assertFalse((output / "deliverables").exists())
                 else:
-                    ipa = exporter.sign_and_export(output, "development", IDENTITY, self.state)
+                    ipa = exporter.sign_and_export(output, mode, IDENTITY, self.state)
                     self.assertEqual(events, ["setup", "verify", "cleanup"])
                     self.assertEqual({path.name for path in ipa.parent.iterdir()}, {"GameRemote.ipa", "verification.json"})
                     report = json.loads((ipa.parent / "verification.json").read_text())
                     self.assertFalse(report["uploaded_to_apple"])
+                    self.assertEqual(report["export_classification"], declaration)
+                    self.assertEqual(report["export_declaration_pending"], declaration not in {"exempt", "non-exempt"})
+                    self.assertFalse(report["submission_ready"])
                     self.assertEqual(report["sha256"], hashlib.sha256(ipa.read_bytes()).hexdigest())
                 self.assertIn("cleanup", events)
 

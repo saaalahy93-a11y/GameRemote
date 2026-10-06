@@ -43,6 +43,7 @@ jobs:
       GR_IOS_PRIVACY_URL: ${{ vars.GR_IOS_PRIVACY_URL }}
       GR_IOS_SUPPORT_URL: ${{ vars.GR_IOS_SUPPORT_URL }}
       GR_IOS_SOURCE_URL: ${{ vars.GR_IOS_SOURCE_URL }}
+      # Explicit choice: exempt, non-exempt, or defer-to-app-store-connect (questionnaire pending).
       GR_IOS_EXPORT_CLASSIFICATION: ${{ vars.GR_IOS_EXPORT_CLASSIFICATION }}
       GR_IOS_SIGNING_IDENTITY: ${{ vars.GR_IOS_SIGNING_IDENTITY }}
     steps:
