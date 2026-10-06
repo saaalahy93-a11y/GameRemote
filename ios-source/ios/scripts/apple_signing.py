@@ -300,7 +300,7 @@ def verify_signed_app(app, config, signing):
         raise ValueError("Exported executable is not an iOS device Mach-O")
     with tempfile.TemporaryDirectory(prefix="gameremote-cert-check-") as directory:
         prefix = str(Path(directory) / "signer")
-        native(["codesign", "--display", "--extract-certificates", prefix, str(app)])
+        native(["codesign", "--display", "--extract-certificates=" + prefix, str(app)])
         leaf = Path(prefix + "0")
         if not leaf.is_file() or hashlib.sha1(leaf.read_bytes()).hexdigest().upper() != signing.identity.upper():
             raise ValueError("Exported app was not signed by the selected certificate")

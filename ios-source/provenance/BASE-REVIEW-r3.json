@@ -1,0 +1,10 @@
+{
+  "archive_sha256": "d55e6c34265bac9d1b5b7167296345cb5bc74e093b33410aef4a681b890c7bf3",
+  "decision": "APPROVE",
+  "evidence_log": "20261006-191409-y35so5c5.log",
+  "findings": [],
+  "reviewer": "mac_vulkan_cpp_review",
+  "scope": "Historical independent approval of the exact r3 source archive, seven-file source delta, packaging changes and unchanged-member comparison. This is not r4 archive approval.",
+  "source_manifest_sha256": "3e97cf20b591507c6c49fe224fc12af6dfa6c45b3a72f406d98d38ae630bfb00",
+  "source_verification_sha256": "8678c0873efffe7e0d02a7e3e66f1595e2218fe4e678d400e6eed4b138cd8992"
+}

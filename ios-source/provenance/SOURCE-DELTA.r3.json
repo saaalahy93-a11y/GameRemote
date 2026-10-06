@@ -1,0 +1,120 @@
+{
+  "all_five_upstream_archives_and_all_four_vendor_trees_unchanged": true,
+  "all_licence_and_notice_bytes_unchanged": true,
+  "base_archive": {
+    "bytes": 20006759,
+    "file": "GameRemote-iOS-1.10.0-build3-source-r2.tar.gz",
+    "sha256": "099ba9a2ef2badcee89f3f696e72c356c32f1aff18d607e3adc1cb1789478fb9"
+  },
+  "carried_forward_independent_audit": {
+    "archive_sha256": "099ba9a2ef2badcee89f3f696e72c356c32f1aff18d607e3adc1cb1789478fb9",
+    "evidence": "provenance/BASE-REVIEW-r2.json",
+    "reviewer": "ios_build_patch_review",
+    "scope": "The previous approval applies to audited r2. Exact unchanged-member comparison carries it forward only for unchanged bytes/types/modes; the seven approved replacements and packaging delta require r3 review.",
+    "status": "APPROVED_R2_EXACT_ARCHIVE"
+  },
+  "dependency_downloads_performed": 0,
+  "integration": {
+    "input_delta_sha256": "713859f1ce700ea80b6097c31d8550bcabd6d724d0a8474458233726729aa053",
+    "patch_sha256": "421aecde02b408e27de86becb0815fbcaa3d987f982e1333887e7b93176b723a",
+    "receipt": "provenance/deferred-export-integration.json",
+    "review": "ios_build_patch_review APPROVE no findings",
+    "review_log": "work/logs/20261006-185938-kch2xd73.log",
+    "status": "REVIEWED_AND_INTEGRATED"
+  },
+  "limits": [
+    "Source-only intended 1.10.0/build3; no signed binary or native build match is asserted.",
+    "Deferred declaration supports local archive/export with the questionnaire pending; no legal classification is made.",
+    "No dependency fetching, source worktree mutation, Git history read or external publication is performed by this packaging task."
+  ],
+  "packaging_additions": [
+    "provenance/BASE-REVIEW-r2.json",
+    "provenance/SOURCE-DELTA.r2.json",
+    "provenance/deferred-export-integration.json",
+    "provenance/deferred-export.patch"
+  ],
+  "packaging_replacements": [
+    "BUILDING-iOS.md",
+    "README.md",
+    "SOURCE-DELTA.json",
+    "SOURCE-MANIFEST.json"
+  ],
+  "project_added": 0,
+  "project_changed": 7,
+  "project_removed": 0,
+  "r3_archive_review": "PENDING_INDEPENDENT_DELTA_REVIEW",
+  "revision": "r3",
+  "root_directory_rename": {
+    "after": "GameRemote-iOS-1.10.0-build3-source-r3",
+    "before": "GameRemote-iOS-1.10.0-build3-source-r2"
+  },
+  "schema_version": 1,
+  "source_changes": [
+    {
+      "bytes": 5072,
+      "change": "changed",
+      "mode": "0644",
+      "path": ".github/workflows/ios-signing-export.yml",
+      "previous_sha256": "9d44f5b86797cb1cbdaf57d01ec4666a6e1f4dc497a9c2a5572802a5a9b60652",
+      "sha256": "dcfa4cfb107b227dbeffd2b0d2a696c7697bc4201b8eeb6d0ba918c2ae162620",
+      "type": "file"
+    },
+    {
+      "bytes": 16496,
+      "change": "changed",
+      "mode": "0644",
+      "path": "docs/release/ios-store-profile.md",
+      "previous_sha256": "4c7eb11700c05c304421a3a4699a71a3c7a254c4024ce169a10c26060db570c0",
+      "sha256": "948f89e64388e6b1721a6f127bc6cd1e802138eda00022e15e3b4cbd2f0fdde1",
+      "type": "file"
+    },
+    {
+      "bytes": 3774,
+      "change": "changed",
+      "mode": "0644",
+      "path": "ios/cmake/ReleaseConfig.cmake",
+      "previous_sha256": "64377366256def89ceb779196b38fdbd64f9bf61d6d135bca9653933ec8ec0fd",
+      "sha256": "26978440c855a548da046b8cc5b53ca3d2814bdb5a8eda0a179be972ba711f70",
+      "type": "file"
+    },
+    {
+      "bytes": 7030,
+      "change": "changed",
+      "mode": "0755",
+      "path": "ios/scripts/release_config.py",
+      "previous_sha256": "ac9655f1dd6d118fc1532ae084164552304bfc385658f1cdf4dadaef088f4a30",
+      "sha256": "59518139be6463bc927d9d04129056f3d273bfa533b526a47315f6639d3b5eac",
+      "type": "file"
+    },
+    {
+      "bytes": 7275,
+      "change": "changed",
+      "mode": "0644",
+      "path": "ios/scripts/sign-and-export.py",
+      "previous_sha256": "9c7b53ea7f8010df98dee5cd94a9632d4d99f32d9d4c43b0ee8c84216b123852",
+      "sha256": "84f4544884bc3624a61b9841618016187654f6ca58e4cdc7a078f2e74123e816",
+      "type": "file"
+    },
+    {
+      "bytes": 23961,
+      "change": "changed",
+      "mode": "0755",
+      "path": "ios/tests/test-release-config.py",
+      "previous_sha256": "1019ab6e98736e48b0668a0afafa92258fb7f7a16027b84b063ba4166e80a104",
+      "sha256": "2d6b957505719d811e1f30c33918c057da0f699ef78169fba16bc952dd9b7aad",
+      "type": "file"
+    },
+    {
+      "bytes": 39992,
+      "change": "changed",
+      "mode": "0644",
+      "path": "ios/tests/test_apple_signing.py",
+      "previous_sha256": "0fbe745d856efc47ebd35893dce055a98653f2bcfef4db2cb5708c01a5a768dd",
+      "sha256": "cee89d3f5b27d496fbf49015b12df0386c9c392f88eab1ce0c3187cce2a33767",
+      "type": "file"
+    }
+  ],
+  "source_owner_commit": "432b5e8f72e42c0b47f6568f8a9560e4d0b678e9",
+  "tests_or_native_builds_rerun": false,
+  "unchanged_project_members": 5032
+}

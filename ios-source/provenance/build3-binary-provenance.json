@@ -1,0 +1,63 @@
+{
+  "assets_sha256": "0b48206ca937a036491603b7470093a4f2c86cbc7355c6123f6de3f382aab908",
+  "base_archive_sha256": "7a122500a92eceb6c8a4fdf27e6db115957424a05233d2246d8960fdf0fe1148",
+  "base_executable_sha256": "4890e80bed94e09e8ddacfdb03a5270b58b72985ed1003da260e3b555fa95daa",
+  "changed_info_keys": [
+    "CFBundleIdentifier",
+    "CFBundleShortVersionString",
+    "CFBundleVersion",
+    "GameRemotePrivacyPolicyURL",
+    "GameRemoteSourceURL",
+    "GameRemoteSupportURL"
+  ],
+  "embedded_swift_runtime": [],
+  "excluded_receipt_fields": [
+    "profile_sha256",
+    "signing_certificate_sha1"
+  ],
+  "export_declaration_pending": true,
+  "ipa": "GameRemote-1.10.0-build3.ipa",
+  "ipa_sha256": "4d390f97d09195312b4989de84d73dcea5934b7d880dd4b38310c11787c95104",
+  "key_exported": false,
+  "limits": [
+    "Apple processing and physical-device playback remain unverified."
+  ],
+  "metadata_source_commit": "432b5e8f72e42c0b47f6568f8a9560e4d0b678e9",
+  "native_source_commit": "7e9e397e07f677282beb1af76448d587f79f300e",
+  "native_source_reuse_review": {
+    "basis": "Coordinator-provided independent review: no compiled-code, asset or dependency changes between the native and metadata source commits; the r4 delta changes packaging/verification scripts and tests only.",
+    "decision": "APPROVE",
+    "reviewer": "ios_identity_swift_review"
+  },
+  "new_native_build": false,
+  "original_verification_receipt_sha256": "ee870a1bc8af0541f7d9f4b8b0c06c5fbc765e882071153bb7b689b221127be3",
+  "packaging_source_commit": "5c1df97059d541c6fc1295abbabd51a415980e26",
+  "privacy_manifests": {
+    "PrivacyInfo.xcprivacy": "e2af0b87a04394e232c6939282d10b711a03bf5c6aad216b1338442d40a2624f",
+    "curl_Privacy.bundle/PrivacyInfo.xcprivacy": "2f7f23e0fcea4a096af7d2efef399ca93e79c91cc06cc60837a51dafd8c6e4a9",
+    "nanopb_Privacy.bundle/PrivacyInfo.xcprivacy": "729ba3cbd0f458c78cd61edf17350edafe0e34ca86e314ec64c8cb22ccd21b54"
+  },
+  "public_configuration": {
+    "BUILD_NUMBER": "3",
+    "BUNDLE_IDENTIFIER": "com.ahmedalsalahy.gameremote",
+    "DEVELOPMENT_TEAM": "4J27D8LXNK",
+    "EXPORT_CLASSIFICATION": "defer-to-app-store-connect",
+    "PRIVACY_URL": "https://saaalahy93-a11y.github.io/GameRemote/privacy.html",
+    "SOURCE_URL": "https://github.com/saaalahy93-a11y/GameRemote/releases/download/ios-1.10.0-build3-source-r4/GameRemote-iOS-1.10.0-build3-source-r4.tar.gz",
+    "SUPPORT_URL": "https://saaalahy93-a11y.github.io/GameRemote/support.html",
+    "VERSION": "1.10.0"
+  },
+  "receipt_basis": "Selected public fields from the existing local verification receipt; source packaging did not repeat native builds, signing or app verification.",
+  "schema_version": 1,
+  "signed_executable_sha256": "13f5b87904e320cd70816f3239aad57e975cb2d325b29e2c6b86600ca1384ce9",
+  "source_archive_hash": "Recorded by the outer delivery receipt and checksums to avoid an archive self-hash cycle.",
+  "source_publication": {
+    "availability_checked_by_this_packaging_task": false,
+    "performed_by_this_packaging_task": false,
+    "planned_url_embedded_in_ipa": "https://github.com/saaalahy93-a11y/GameRemote/releases/download/ios-1.10.0-build3-source-r4/GameRemote-iOS-1.10.0-build3-source-r4.tar.gz"
+  },
+  "status": "LOCALLY_SIGNED_IPA_VERIFIED",
+  "submission_ready": false,
+  "uploaded": false,
+  "verification_evidence": "20261006-200843-tzi94j94.log"
+}

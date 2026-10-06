@@ -120,7 +120,10 @@ class SigningTests(unittest.TestCase):
             elif command[:3] == ["xcrun", "vtool", "-show-build"]:
                 stdout = "   platform " + overrides.get("platform", "IOS") + "\n"
             elif command[:3] == ["codesign", "--display", "--extract-certificates"]:
-                Path(command[3] + "0").write_bytes(overrides.get("certificate", CERTIFICATE))
+                raise RuntimeError("codesign optional prefix requires --extract-certificates=PREFIX")
+            elif command[:2] == ["codesign", "--display"] and command[2].startswith("--extract-certificates="):
+                self.assertEqual(len(command), 4)
+                Path(command[2].split("=", 1)[1] + "0").write_bytes(overrides.get("certificate", CERTIFICATE))
             else:
                 self.fail("Unexpected native command: " + str(command))
             return subprocess.CompletedProcess(command, 0, stdout, stderr)
@@ -364,6 +367,19 @@ class SigningTests(unittest.TestCase):
             config = signing.public_config(mode, environment)
             with self.subTest(mode=mode), patch.object(signing, "native", side_effect=self.native_app(config)):
                 signing.verify_ipa(self.ipa(self.app(config)), config, self.manual)
+
+    def test_certificate_extraction_uses_equals_for_the_optional_prefix(self):
+        app = self.app()
+        command = ["codesign", "--display", "--extract-certificates", str(self.path / "leaf"), str(app)]
+        with self.assertRaisesRegex(RuntimeError, "optional prefix"):
+            self.native_app()(command)
+        with patch.object(signing, "native", side_effect=self.native_app()) as native:
+            signing.verify_signed_app(app, self.config, self.manual)
+        extraction = [call.args[0] for call in native.call_args_list
+                      if any(arg.startswith("--extract-certificates") for arg in call.args[0])]
+        self.assertEqual(len(extraction), 1)
+        self.assertEqual(len(extraction[0]), 4)
+        self.assertTrue(extraction[0][2].startswith("--extract-certificates="))
 
     def test_deferred_store_ipa_accepts_omission_and_rejects_either_encryption_key(self):
         config = signing.public_config("store", {**STORE, "GR_IOS_EXPORT_CLASSIFICATION": "defer-to-app-store-connect"})

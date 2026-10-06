@@ -1,0 +1,50 @@
+{
+  "decision": "APPROVE",
+  "existing_focused_evidence": [
+    "20261006-200232-sk2lwjje.log",
+    "20261006-200703-evbkpcsv.log",
+    "20261006-201001-gqlu980h.log"
+  ],
+  "files": [
+    {
+      "bytes": 18727,
+      "change": "changed",
+      "mode": "0644",
+      "path": "ios/scripts/apple_signing.py",
+      "previous_sha256": "414631c00959beffe9a5b0bea5b10385bd0dab345278c911c5b915f21d2e44f9",
+      "sha256": "ace5e63a53ee26f3a9e36cf0e7ca0fe4c6768a5418b08be2495cd3c2f3212cdc",
+      "type": "file"
+    },
+    {
+      "bytes": 8530,
+      "change": "added",
+      "mode": "0644",
+      "path": "ios/scripts/repackage-verified-device.py",
+      "previous_sha256": null,
+      "sha256": "3d4802bf92aeb268881188d4f81c1a6dbb878e27a67dd35f78ccf8cdc0a92e3a",
+      "type": "file"
+    },
+    {
+      "bytes": 41086,
+      "change": "changed",
+      "mode": "0644",
+      "path": "ios/tests/test_apple_signing.py",
+      "previous_sha256": "cee89d3f5b27d496fbf49015b12df0386c9c392f88eab1ce0c3187cce2a33767",
+      "sha256": "dd227b9cddbf16cef4fc0d9d73de5dbc11ad5d70220ab98c91515919657e0e76",
+      "type": "file"
+    },
+    {
+      "bytes": 2459,
+      "change": "added",
+      "mode": "0644",
+      "path": "ios/tests/test_repackage_verified_device.py",
+      "previous_sha256": null,
+      "sha256": "76b6e3f0a4694eadd6d3c644eca8e0b3e4bb43869fa77ed3691a1bab6e9daad2",
+      "type": "file"
+    }
+  ],
+  "reviewer": "ios_ci_python_review",
+  "scope": "Two changed verifier/test files and two new artifact-reuse recipe/test files; no app production source, assets, dependencies or notices changed. Frozen hashes supplied by the release coordinator and verified during packaging.",
+  "source_commit": "5c1df97059d541c6fc1295abbabd51a415980e26",
+  "status": "COORDINATOR_FROZEN_AND_INDEPENDENTLY_APPROVED"
+}
