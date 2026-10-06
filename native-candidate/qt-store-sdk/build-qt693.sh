@@ -39,6 +39,10 @@ require_vulkan_headers() {
     test -f "$QT_VULKAN_INCLUDE_DIR/vulkan/vulkan.h"
     test -f "$QT_VULKAN_INCLUDE_DIR/vulkan/vulkan_core.h"
     test -f "$QT_VULKAN_INCLUDE_DIR/vulkan/vk_platform.h"
+    if [[ ! -f "$QT_VULKAN_INCLUDE_DIR/MoltenVK/mvk_vulkan.h" ]]; then
+        printf 'Qt Cocoa requires verified MoltenVK/mvk_vulkan.h in QT_VULKAN_INCLUDE_DIR\n' >&2
+        return 1
+    fi
 }
 
 verify_downloads() {

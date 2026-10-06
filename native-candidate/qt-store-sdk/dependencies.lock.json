@@ -21,6 +21,12 @@
       "url": "https://github.com/KhronosGroup/Vulkan-Headers/archive/refs/tags/vulkan-sdk-1.4.357.0.tar.gz",
       "sha256": "e87dce08116151f6b6d7de6b6faf41498e87e6cf848ff16fa3bd5402190ad4a3",
       "filename": "Vulkan-Headers-vulkan-sdk-1.4.357.0.tar.gz"
+    },
+    "moltenvk_headers": {
+      "version": "1.4.2",
+      "url": "https://github.com/KhronosGroup/MoltenVK/archive/refs/tags/v1.4.2.tar.gz",
+      "sha256": "6864db532f1dbbdb621a8d0ec13f24edae318fd9269dd3dd0cdff791334bb1cb",
+      "filename": "MoltenVK-1.4.2.tar.gz"
     }
   }
 }

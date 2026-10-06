@@ -38,6 +38,70 @@ class VulkanSdkTests(unittest.TestCase):
         return {'version': 'fixture', 'url': 'https://example.invalid/headers.tar.gz',
                 'filename': archive.name, 'sha256': common.digest(archive)}
 
+    def moltenvk_archive(self, kind='file'):
+        archive = self.work / 'downloads/MoltenVK-fixture.tar.gz'
+        archive.parent.mkdir(exist_ok=True)
+        with tarfile.open(archive, 'w:gz') as output:
+            name = 'mvk_vulkan.h' if kind != 'missing' else 'another.h'
+            member = tarfile.TarInfo('MoltenVK-fixture/MoltenVK/MoltenVK/API/' + name)
+            if kind == 'symlink':
+                member.type = tarfile.SYMTYPE
+                member.linkname = '/unrelated/header'
+                output.addfile(member)
+            else:
+                data = b'/* explicitly synthetic MoltenVK header fixture */'
+                member.size = len(data)
+                output.addfile(member, io.BytesIO(data))
+        return {'version': 'fixture', 'url': 'https://example.invalid/MoltenVK-fixture.tar.gz',
+                'filename': archive.name, 'sha256': common.digest(archive)}
+
+    def test_macos_headers_bind_moltenvk_source_without_modifying_khronos_tree(self):
+        vulkan = build_macos.prepare_vulkan_headers(self.archive(), self.work, self.evidence)
+        spec = self.moltenvk_archive()
+        with patch.object(common.urllib.request, 'urlopen', side_effect=AssertionError('network forbidden')):
+            include = build_macos.prepare_macos_vulkan_headers(vulkan, spec, self.work, self.evidence)
+        self.assertFalse((vulkan / 'MoltenVK').exists())
+        self.assertEqual((include / 'vulkan/vulkan.h').read_bytes(), (vulkan / 'vulkan/vulkan.h').read_bytes())
+        record = json.loads((self.evidence / 'moltenvk-headers.json').read_text())
+        self.assertEqual(record['archive_sha256'], spec['sha256'])
+        self.assertEqual(record['source_member'], 'MoltenVK-fixture/MoltenVK/MoltenVK/API/mvk_vulkan.h')
+        self.assertEqual(record['header_sha256'], common.digest(include / record['header']))
+        with self.assertRaisesRegex(ValueError, 'cached'):
+            build_macos.prepare_macos_vulkan_headers(vulkan, {**spec, 'sha256': '0' * 64}, self.work, self.evidence)
+
+    def test_macos_headers_reject_missing_and_non_regular_wrapper(self):
+        vulkan = build_macos.prepare_vulkan_headers(self.archive(), self.work, self.evidence)
+        for kind, message in (('missing', 'missing mvk_vulkan.h'), ('symlink', 'bounded regular file')):
+            with self.subTest(kind=kind), self.assertRaisesRegex(ValueError, message):
+                build_macos.prepare_macos_vulkan_headers(vulkan, self.moltenvk_archive(kind), self.work, self.evidence)
+            self.assertFalse((self.work / 'macos-vulkan-include').exists())
+
+    def test_recipe_rejects_khronos_only_headers_before_xcode_or_compilation(self):
+        vulkan = build_macos.prepare_vulkan_headers(self.archive(), self.work, self.evidence)
+        environment = dict(os.environ, QT_CMAKE_TOOL_BIN=str(self.work / 'unused-tools'),
+                           QT_VULKAN_INCLUDE_DIR=str(vulkan))
+        result = subprocess.run(['bash', str(ROOT / 'build-qt693.sh'), 'configure'],
+                                env=environment, capture_output=True, text=True, timeout=10, check=False)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('Qt Cocoa requires verified MoltenVK/mvk_vulkan.h', result.stderr)
+        self.assertEqual(result.stdout, '')
+
+    def test_header_compile_failure_stops_before_any_qt_build_phase(self):
+        lock = {'macos': {'developer_dir': '/fixture/Xcode', 'xcode': '16.4', 'sdk': '15.5',
+                          'vulkan_headers': {}, 'moltenvk_headers': {}}}
+        with (patch.dict(os.environ, {}, clear=False),
+              patch.object(build_macos, 'read_lock', return_value=lock),
+              patch.object(build_macos, 'tools_for', return_value={}),
+              patch.object(build_macos, 'prepare_vulkan_headers', return_value=self.work / 'khronos'),
+              patch.object(build_macos, 'prepare_macos_vulkan_headers', return_value=self.work / 'combined'),
+              patch.object(build_macos.subprocess, 'check_output', side_effect=['Xcode 16.4\nBuild fixture', '15.5']),
+              patch.object(build_macos, 'run', side_effect=RuntimeError('header compile fixture failure')) as run,
+              self.assertRaisesRegex(RuntimeError, 'header compile fixture failure')):
+            build_macos.build(self.work, self.evidence)
+        run.assert_called_once()
+        self.assertIn('-fsyntax-only', run.call_args.args[0])
+        self.assertFalse((self.work / 'qt-store-sdk').exists())
+
     def test_exact_cached_archive_is_verified_and_its_headers_are_recorded(self):
         spec = self.archive()
         with patch.object(common.urllib.request, 'urlopen', side_effect=AssertionError('network forbidden')):
@@ -81,15 +145,21 @@ class VulkanSdkTests(unittest.TestCase):
     def test_native_driver_passes_verified_headers_to_build_and_relocation_probe(self):
         spec = self.archive()
         lock = {'macos': {'developer_dir': '/fixture/Xcode', 'xcode': '16.4',
-                          'sdk': '15.5', 'vulkan_headers': spec}}
+                          'sdk': '15.5', 'vulkan_headers': spec, 'moltenvk_headers': self.moltenvk_archive()}}
         tools = {'cmake': self.work / 'tools/cmake', 'ninja': self.work / 'tools/ninja'}
         recipe = self.work / 'qt-store-sdk'
         calls = []
 
         def run(command, **kwargs):
+            calls.append(list(map(str, command)))
+            if '-fsyntax-only' in command:
+                include = Path(command[command.index('-I') + 1])
+                self.assertTrue((include / 'MoltenVK/mvk_vulkan.h').is_file())
+                self.assertEqual(kwargs['timeout'], 60)
+                return
             include = Path(os.environ['QT_VULKAN_INCLUDE_DIR'])
             self.assertTrue((include / 'vulkan/vulkan.h').is_file())
-            calls.append(list(map(str, command)))
+            self.assertTrue((include / 'MoltenVK/mvk_vulkan.h').is_file())
             if command[-1] == 'build':
                 (recipe / 'prefix/bin').mkdir(parents=True)
                 (recipe / 'prefix/bin/qt-cmake').write_text('synthetic tool fixture')
@@ -110,7 +180,10 @@ class VulkanSdkTests(unittest.TestCase):
             package = build_macos.build(self.work, self.evidence)
         self.assertTrue(package.is_file())
         self.assertTrue((self.evidence / 'vulkan-headers.json').is_file())
-        self.assertEqual([call[-1] for call in calls[:4]], ['preflight', 'download', 'sources', 'build'])
+        self.assertIn('-fsyntax-only', calls[0])
+        self.assertEqual([call[-1] for call in calls if call[0] == 'bash'],
+                         ['preflight', 'download', 'sources', 'build'])
+        self.assertTrue((self.evidence / 'macos-vulkan-header-check.json').is_file())
         self.assertTrue((self.evidence / 'relocated-qt-guard.json').is_file())
 
     def test_public_entry_point_records_reference_without_reading_app_source(self):

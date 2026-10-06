@@ -9,16 +9,27 @@ window or rendering work. This is SDK capability evidence, not a GPU test.
 
 `build_sdk.py` downloads checksum-pinned Khronos Vulkan-Headers 1.4.357.0 from
 `dependencies.lock.json`, validates the required headers and records the source
-archive and header hashes in `evidence/vulkan-headers.json`. It supplies the
-explicit include directory through `QT_VULKAN_INCLUDE_DIR`. The QtBase recipe
+archive and header hashes in `evidence/vulkan-headers.json`. Qt's Mac Cocoa plugin
+also requires `MoltenVK/mvk_vulkan.h`. The builder takes that exact header from
+checksum-pinned MoltenVK 1.4.2 source and records its archive/member/header hashes
+in `evidence/moltenvk-headers.json`. A separate combined include tree preserves
+the original Khronos extraction and supplies both through `QT_VULKAN_INCLUDE_DIR`.
+No MoltenVK runtime library is built or linked by this SDK preparation.
+The QtBase recipe
 requires `-feature-vulkan` and passes `Vulkan_INCLUDE_DIR` to all module and
 probe configurations. Missing headers or a disabled Qt Vulkan feature fail the
 build. The previous SDK with SHA-256
 `45a4253bac4191cfabc34d49ef43c6ff7f07900c9e3ac3e50731008af56328b8`
 has `QT_FEATURE_vulkan=-1` and cannot build the current GameRemote renderer.
 
-Qt's exact 6.9.3 `FindWrapVulkanHeaders.cmake` requires Vulkan headers for this
-build; the app separately needs its selected Vulkan loader and MoltenVK runtime.
+Before Qt compilation, a bounded Objective-C++ syntax check includes the MoltenVK
+wrapper and requires the macOS surface structure and function-pointer types used
+by Qt Cocoa. The shell recipe also rejects a Khronos-only include directory.
+This catches the missing-header failure seen in public run 37477932059 before
+the long build begins; it is not a GPU test or a completed SDK build.
+
+Qt's exact 6.9.3 `FindWrapVulkanHeaders.cmake` propagates this include directory;
+the app separately needs its selected Vulkan loader and MoltenVK runtime.
 Consumers must supply compatible Vulkan headers in their dependency prefixes.
 Rebuilding only QtGui would leave QtQuick's conditional Vulkan API unverified;
 the recipe produces a fresh, consistent four-module SDK.
@@ -41,7 +52,7 @@ inputs and hashes are recorded in `evidence/recipe-inputs.json`.
 ## Source and notice distribution
 
 The successful artifact includes the SDK archive together with the exact four
-Qt source archives and Vulkan-Headers source archive used by the build. These
+Qt source archives, Vulkan-Headers and MoltenVK source archives used by the build. These
 are complete upstream archives, including embedded third-party sources. No
 private application archive is included. `recipe.tar.gz` retains this directory's
 explicit source/test files and the workflow, including its hidden `.github` path.
@@ -99,7 +110,7 @@ Standard hosted runner compute is free for public repositories; larger runners
 are billed. Artifact storage and retention still require attention to the
 account's shared storage allowance. This workflow retains evidence and the
 successful SDK/source kit for one day and adds no Actions cache. The earlier SDK
-was about 44 MB, and the five retained source archives total about 94 MB before
+was about 44 MB, and the six retained source archives total about 95 MB before
 notice/inventory overhead; the new complete artifact size is not yet known.
 Download and verify the successful artifact and its receipt before selecting its new hash for an app
 build. Publishing this recipe or a successful SDK does not qualify an app for
@@ -108,6 +119,8 @@ the App Store.
 References:
 
 - [Khronos Vulkan-Headers release](https://github.com/KhronosGroup/Vulkan-Headers/releases/tag/vulkan-sdk-1.4.357.0)
+- [MoltenVK 1.4.2 Cocoa wrapper header](https://github.com/KhronosGroup/MoltenVK/blob/v1.4.2/MoltenVK/MoltenVK/API/mvk_vulkan.h)
+- [Qt 6.9.3 Cocoa Vulkan header requirement](https://github.com/qt/qtbase/blob/v6.9.3/src/plugins/platforms/cocoa/qcocoavulkaninstance.h)
 - [Qt 6.9 macOS requirements](https://doc.qt.io/archives/qt-6.9/macos.html)
 - [Qt open-source distribution obligations](https://www.qt.io/development/open-source-lgpl-obligations)
 - [GitHub Actions billing and storage](https://docs.github.com/en/billing/concepts/product-billing/github-actions)

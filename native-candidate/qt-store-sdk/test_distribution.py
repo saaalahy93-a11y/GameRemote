@@ -55,6 +55,12 @@ class DistributionTests(unittest.TestCase):
         self.lock = {'macos': {'vulkan_headers': {
             'version': 'fixture', 'url': 'https://example.invalid/headers.tar.gz',
             'filename': vulkan.name, 'sha256': digest(vulkan)}}}
+        moltenvk = self.work / 'downloads/MoltenVK-fixture.tar.gz'
+        archive(moltenvk, {'MoltenVK-fixture/LICENSE': b'synthetic MoltenVK notice'})
+        self.sources.append(moltenvk)
+        self.lock['macos']['moltenvk_headers'] = {
+            'version': 'fixture', 'url': 'https://example.invalid/MoltenVK-fixture.tar.gz',
+            'filename': moltenvk.name, 'sha256': digest(moltenvk)}
         (self.recipe / 'dependencies.lock.json').write_text(json.dumps(self.lock))
         self.prefix = self.work / 'relocated/Qt-6.9.3-appstore-arm64'
         binary = self.prefix / 'lib/fixture.dylib'
@@ -72,8 +78,8 @@ class DistributionTests(unittest.TestCase):
         inspect.assert_called_once_with(self.prefix / 'lib/fixture.dylib')
         result = json.loads((self.output / summary['file']).read_text())
         self.assertEqual(summary['sha256'], digest(self.output / summary['file']))
-        self.assertEqual(summary['source_archives'], 5)
-        self.assertEqual(summary['notice_records'], 13)
+        self.assertEqual(summary['source_archives'], 6)
+        self.assertEqual(summary['notice_records'], 14)
         self.assertFalse(result['private_app_source_included'])
         for section in ('sdk', 'sdk_inventory', 'readme', 'recipe'):
             self.assertEqual(result[section]['sha256'], digest(self.output / result[section]['file']))
@@ -81,7 +87,7 @@ class DistributionTests(unittest.TestCase):
             self.assertEqual(row['sha256'], digest(self.output / row['file']))
             for notice in row['texts']:
                 self.assertEqual(notice['sha256'], digest(self.output / notice['file']))
-        self.assertEqual(len(list((self.output / 'notices').iterdir())), 4)
+        self.assertEqual(len(list((self.output / 'notices').iterdir())), 5)
         inventory = json.loads((self.output / 'sdk-inventory.json').read_text())
         self.assertEqual(inventory['mach_o'][0]['sha256'], digest(self.prefix / 'lib/fixture.dylib'))
         with tarfile.open(self.output / 'recipe.tar.gz') as recipe_archive:
@@ -93,6 +99,13 @@ class DistributionTests(unittest.TestCase):
     def test_changed_source_archive_is_rejected_before_copy(self):
         self.sources[0].write_bytes(b'changed upstream bytes')
         with self.assertRaisesRegex(ValueError, 'checksum changed: qtbase'):
+            distribution.assemble_distribution(self.package, self.work, self.output,
+                                               self.recipe, self.workflow)
+        self.assertFalse((self.output / 'sources').exists())
+
+    def test_missing_moltenvk_source_cannot_produce_a_distribution(self):
+        self.sources[-1].unlink()
+        with self.assertRaisesRegex(ValueError, 'checksum changed: MoltenVK'):
             distribution.assemble_distribution(self.package, self.work, self.output,
                                                self.recipe, self.workflow)
         self.assertFalse((self.output / 'sources').exists())

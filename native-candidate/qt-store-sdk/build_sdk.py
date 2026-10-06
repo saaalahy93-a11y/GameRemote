@@ -43,6 +43,47 @@ def prepare_vulkan_headers(spec: dict, work: Path, evidence: Path) -> Path:
     return include
 
 
+def prepare_macos_vulkan_headers(vulkan_include: Path, spec: dict, work: Path, evidence: Path) -> Path:
+    """Add Qt Cocoa's exact MoltenVK wrapper header to a separate include tree."""
+    archive = fetch(spec, work / 'downloads')
+    member_name = f'MoltenVK-{spec["version"]}/MoltenVK/MoltenVK/API/mvk_vulkan.h'
+    with tarfile.open(archive, 'r:gz') as source:
+        try:
+            member = source.getmember(member_name)
+        except KeyError as error:
+            raise ValueError('pinned MoltenVK archive is missing mvk_vulkan.h') from error
+        if not member.isfile() or not 0 < member.size <= 64 * 1024:
+            raise ValueError('MoltenVK wrapper header must be a bounded regular file')
+        contents = source.extractfile(member).read()
+    include = work / 'macos-vulkan-include'
+    shutil.copytree(vulkan_include, include)
+    (include / 'MoltenVK').mkdir()
+    header = include / 'MoltenVK/mvk_vulkan.h'
+    header.write_bytes(contents)
+    write_json(evidence / 'moltenvk-headers.json', {
+        'version': spec['version'], 'url': spec['url'], 'archive_sha256': digest(archive),
+        'source_member': member_name, 'header': 'MoltenVK/mvk_vulkan.h', 'header_sha256': digest(header),
+        'include': str(include), 'khronos_include_origin': str(vulkan_include),
+        'purpose': 'Qt Cocoa compile-time wrapper; no MoltenVK runtime library is built or linked',
+    })
+    return include
+
+
+def verify_macos_vulkan_headers(include: Path, evidence: Path) -> None:
+    """Fail before Qt compilation if Cocoa's header or surface API is absent."""
+    probe = evidence / 'macos-vulkan-headers.mm'
+    probe.write_text('#include <MoltenVK/mvk_vulkan.h>\n'
+                     'static_assert(VK_USE_PLATFORM_MACOS_MVK == 1);\n'
+                     'static_assert(sizeof(VkMacOSSurfaceCreateInfoMVK) > 0);\n'
+                     'static_assert(sizeof(PFN_vkCreateMacOSSurfaceMVK) > 0);\n')
+    run(['/usr/bin/xcrun', '--sdk', 'macosx', 'clang++', '-x', 'objective-c++', '-std=c++17',
+         '-arch', 'arm64', '-fsyntax-only', '-I', str(include), str(probe)], timeout=60)
+    write_json(evidence / 'macos-vulkan-header-check.json', {
+        'status': 'passed', 'probe_sha256': digest(probe), 'include': str(include),
+        'scope': 'Objective-C++ header/type compilation only; no linking, GPU or runtime execution',
+    })
+
+
 def build(work: Path, evidence: Path) -> Path:
     lock = read_lock()['macos']
     os.environ['DEVELOPER_DIR'] = lock['developer_dir']
@@ -53,6 +94,8 @@ def build(work: Path, evidence: Path) -> Path:
     write_json(evidence / 'toolchain.json', {'xcode': xcode, 'sdk': sdk})
     tools = tools_for('macos', work)
     vulkan_include = prepare_vulkan_headers(lock['vulkan_headers'], work, evidence)
+    vulkan_include = prepare_macos_vulkan_headers(vulkan_include, lock['moltenvk_headers'], work, evidence)
+    verify_macos_vulkan_headers(vulkan_include, evidence)
     recipe = work / 'qt-store-sdk'
     shutil.copytree(ROOT, recipe, ignore=shutil.ignore_patterns('__pycache__'))
     os.environ['QT_CMAKE_TOOL_BIN'] = str(tools['cmake'].parent)

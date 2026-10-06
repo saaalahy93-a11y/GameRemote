@@ -33,10 +33,11 @@ def source_inputs(work, recipe, lock):
                'url': 'https://download.qt.io/archive/qt/6.9/6.9.3/submodules/' + filename,
                'file': work / 'qt-store-sdk/downloads' / filename}
               for name in QT_MODULES for filename in [name + '-everywhere-src-6.9.3.tar.xz']]
-    vulkan = lock['macos']['vulkan_headers']
-    result.append({'component': 'Vulkan-Headers', 'version': vulkan['version'],
-                   'sha256': sha256(vulkan['sha256']), 'url': vulkan['url'],
-                   'file': work / 'downloads' / vulkan['filename']})
+    for component, key in (('Vulkan-Headers', 'vulkan_headers'), ('MoltenVK', 'moltenvk_headers')):
+        spec = lock['macos'][key]
+        result.append({'component': component, 'version': spec['version'],
+                       'sha256': sha256(spec['sha256']), 'url': spec['url'],
+                       'file': work / 'downloads' / spec['filename']})
     for item in result:
         if not item['file'].is_file() or digest(item['file']) != item['sha256']:
             raise ValueError('source kit archive missing or checksum changed: ' + item['component'])
@@ -208,8 +209,9 @@ def assemble_distribution(archive, work, output, recipe=ROOT, workflow=None):
         'Qt includes components under the GNU LGPL and other upstream licences.\n'
         'Full upstream licence texts and Qt third-party attributions are in notices/;\n'
         'distribution.json maps every text to its retained source archive/member.\n'
-        'sources/ contains the complete, exact four Qt module archives and Vulkan-Headers\n'
-        'archive used by this build, including all upstream source and licence files.\n'
+        'sources/ contains the complete, exact four Qt module archives, Vulkan-Headers\n'
+        'and MoltenVK source archives used by this build, including upstream licences.\n'
+        'Only the MoltenVK wrapper header is used; no MoltenVK runtime is built or linked.\n'
         'recipe.tar.gz contains the build scripts, pinned inputs, tests and workflow.\n'
         'distribution.json binds these materials to the SDK binary archive by SHA-256.\n'
         'sdk-inventory.json records the actual SDK member hashes, arm64 Mach-O files and\n'
