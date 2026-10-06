@@ -1,0 +1,13 @@
+# GameRemote — iPhone and iPad source candidate
+
+This is the source-only candidate for **GameRemote 1.10.0, intended build 3, source revision r2**, prepared 6 October 2026. Start with [BUILDING-iOS.md](BUILDING-iOS.md). The iOS frontend, shared protocol core, four expanded vendor trees, five exact upstream source archives and licence notices are included. Disabled Android/desktop/Switch app targets and internal validation records are outside this iOS-only selection.
+
+This is a snapshot of a committed base plus explicitly recorded reviewed changes, including manual signing, explicit codesign XML parsing, the nanopb privacy resource bundle, and the reviewed curl privacy resource correction. It is not identified by the base commit alone and does not claim to match the earlier Build2 binaries. SOURCE-MANIFEST.json records the delivered project bytes/modes and working-tree changes. Original source file bodies are preserved; the previous project README is retained at provenance/README.project.md. Packaging/build documents are additions.
+
+GameRemote is a modified derivative of chiaki-ng, based on Chiaki. It retains AGPL-3.0-only and the existing OpenSSL additional permission. See COPYING, LICENSES/AGPL-3.0-only-OpenSSL.txt, docs/prototype/NOTICE.md and notices/. Source/header copyright and author notices remain intact. Mbed TLS and its framework retain their original dual-licence notices. No alternative licence or proprietary ownership claim is made.
+
+DEPENDENCY-SOURCES.json identifies the nine linked third-party components, exact acquisition references and hashes. Public upstream cryptographic test fixtures are preserved as source inputs; no publisher signing material is included. No .git database/history, .serena state, app build products, local logs, .env files, signing profiles or publisher certificates/keys are included.
+
+This source candidate is prepared for review/publication as an artifact, but has not been hosted or published by this preparation. A final binary needs matching source and its own build/resource/signature/device verification. The separate rights review leaves App Store binary distribution permission under current terms unresolved. Publishing source alone does not resolve that question. Export declarations and other legal/privacy answers also remain separate.
+
+This revision changes only the six source files recorded in SOURCE-DELTA.json from audited v1, plus packaging documents. Four files change and two are added; all other project and dependency source bytes/modes remain identical. All licence notices and pristine dependency archives remain unchanged. The public project destination is https://github.com/saaalahy93-a11y/GameRemote. This source artifact has not been uploaded by this packaging work.

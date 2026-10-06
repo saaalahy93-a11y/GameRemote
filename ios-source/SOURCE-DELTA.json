@@ -1,0 +1,104 @@
+{
+  "all_five_upstream_archives_and_all_four_vendor_trees_unchanged": true,
+  "base_archive": {
+    "bytes": 19992034,
+    "file": "GameRemote-iOS-1.10.0-build3-source.tar.gz",
+    "sha256": "2a3dc0345086a5b7daf4736bdb9765b804c3edd0e9d6c5982616aca9337e6459"
+  },
+  "carried_forward_independent_audit": {
+    "archive_sha256": "2a3dc0345086a5b7daf4736bdb9765b804c3edd0e9d6c5982616aca9337e6459",
+    "asset_filenames": 4,
+    "logs": [
+      "work/logs/20261006-142848-kwoei1xp.log",
+      "work/logs/20261006-143019-g5r193kn.log",
+      "work/logs/20261006-143126-lgho81q3.log",
+      "work/logs/20261006-143401-5on6fpvb.log"
+    ],
+    "reviewer": "ios_build_patch_review",
+    "scope": "No exposure/path/notice/source-closure findings. Four tracked vendor trees and five retained archives compared with official sources. Unchanged bytes carry this evidence forward; six reviewed files are the only source delta.",
+    "static_references": 144,
+    "status": "APPROVED_V1_EXACT_ARCHIVE"
+  },
+  "dependency_downloads_performed": 0,
+  "integration": {
+    "patch_sha256": "ed625e928d51612f9fca80ac8e7fb030b4c466bbea6e26b6991577735f3264b1",
+    "receipt": "outputs/GameRemote-Release-Closure-20261006/evidence/apple-declarations/curl-privacy-integration.json",
+    "receipt_sha256": "dc0a02f48f2b60a34c49b051886ac19833d8ce3c0e66ea0fb3af051660d3409a",
+    "review": "ios_ci_python_review: APPROVE; no findings",
+    "status": "REVIEWED_AND_INTEGRATED"
+  },
+  "limits": [
+    "No native build, runtime privacy aggregation or App Store validation was rerun.",
+    "This is a source candidate for a future build 3; it does not assert a match to a Build2 or Build3 binary.",
+    "Future source changes require a new candidate; no external publication was performed."
+  ],
+  "revision": "r2",
+  "schema_version": 1,
+  "source_changes": [
+    {
+      "bytes": 15871,
+      "change": "changed",
+      "mode": "0644",
+      "path": "docs/release/ios-store-profile.md",
+      "previous_sha256": "c73059f09e009a3e82dd285e470582082fc9c3f01d573966510b4e894cc870dd",
+      "sha256": "4c7eb11700c05c304421a3a4699a71a3c7a254c4024ce169a10c26060db570c0"
+    },
+    {
+      "bytes": 718,
+      "change": "changed",
+      "mode": "0644",
+      "path": "ios/App/PrivacyInfo.xcprivacy",
+      "previous_sha256": "685216d56a944736289867aef5183ed5d20a91ceb1bde6a97f8e9cf199e4d839",
+      "sha256": "e2af0b87a04394e232c6939282d10b711a03bf5c6aad216b1338442d40a2624f"
+    },
+    {
+      "bytes": 8023,
+      "change": "changed",
+      "mode": "0644",
+      "path": "ios/CMakeLists.txt",
+      "previous_sha256": "09ea932812a39f09836637178d3ffb068ba281ddb02555d67bbe67b87f8f850b",
+      "sha256": "8d65259c5bb3c8202b73c97169aafd84957687afe0ad123e0e9dcb7459d72e34"
+    },
+    {
+      "bytes": 872,
+      "change": "added",
+      "mode": "0644",
+      "path": "ios/Dependencies/curl/PrivacyInfo.xcprivacy",
+      "previous_sha256": null,
+      "sha256": "2f7f23e0fcea4a096af7d2efef399ca93e79c91cc06cc60837a51dafd8c6e4a9"
+    },
+    {
+      "bytes": 1203,
+      "change": "added",
+      "mode": "0644",
+      "path": "ios/cmake/CurlPrivacy.cmake",
+      "previous_sha256": null,
+      "sha256": "eb2c7d9719d5ae68ddbb00d2f38ecdf4cfb401e347621786efab329beaa665ff"
+    },
+    {
+      "bytes": 21960,
+      "change": "changed",
+      "mode": "0755",
+      "path": "ios/tests/test-release-config.py",
+      "previous_sha256": "a2cb5978e2cd26bf24d143b348f3138cc09374f5a98562051de1443f75281078",
+      "sha256": "1019ab6e98736e48b0668a0afafa92258fb7f7a16027b84b063ba4166e80a104"
+    }
+  ],
+  "targeted_delta_screening": {
+    "claim": "Targeted delta check; no exhaustive secret-content audit.",
+    "files": 6,
+    "findings": [
+      {
+        "classification": "Reviewed synthetic invalid-URL rejection fixture carried unchanged from audited v1",
+        "file_sha256": "1019ab6e98736e48b0668a0afafa92258fb7f7a16027b84b063ba4166e80a104",
+        "line": 226,
+        "path": "ios/tests/test-release-config.py",
+        "pattern": "credentialed_https_url",
+        "value": "[REDACTED]"
+      }
+    ],
+    "unreviewed_findings": 0
+  },
+  "unchanged_project_bytes_modes_and_types_match_v1": true,
+  "unchanged_project_members": 5033
+}

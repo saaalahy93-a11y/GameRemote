@@ -1,0 +1,37 @@
+appId: org.example.RemotePlayPrototype.iOS
+name: Manual registration validation
+---
+- launchApp:
+    clearState: true
+- tapOn:
+    id: home.add-console
+- tapOn:
+    id: console.next
+- assertVisible: "Enter an IP address or hostname without spaces."
+- tapOn:
+    id: console.address
+- inputText: "192.0.2.10"
+- tapOn:
+    id: console.keyboard-done
+- scrollUntilVisible:
+    element:
+      id: console.next
+    direction: DOWN
+- tapOn:
+    id: console.next
+- assertVisible: "PSN account ID"
+- assertVisible:
+    id: registration.account
+- assertVisible: "Console pairing code"
+- assertVisible:
+    id: registration.pairing-code
+- takeScreenshot: registration-form
+- scrollUntilVisible:
+    element:
+      id: registration.submit
+    direction: DOWN
+- tapOn:
+    id: registration.submit
+- assertVisible: "Enter a base64 account ID that decodes to eight bytes."
+- takeScreenshot: registration-validation
+- assertNotVisible: "Registering…"

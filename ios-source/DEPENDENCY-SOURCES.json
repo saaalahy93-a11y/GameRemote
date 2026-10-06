@@ -1,0 +1,386 @@
+{
+  "apple_system_frameworks": [
+    "SwiftUI",
+    "UIKit",
+    "AVFoundation",
+    "VideoToolbox",
+    "GameController",
+    "Security",
+    "CoreMedia",
+    "AudioToolbox"
+  ],
+  "intended_release": {
+    "build": "3",
+    "status": "source candidate; no matching new binary established",
+    "version": "1.10.0"
+  },
+  "ios_privacy_resource_delta": {
+    "cmake_helper": "ios/cmake/CurlPrivacy.cmake",
+    "curl_integration_manifest": "ios/Dependencies/curl/PrivacyInfo.xcprivacy",
+    "dependency_source_versions_changed": false,
+    "intended_app_resource": "GameRemote.app/curl_Privacy.bundle/PrivacyInfo.xcprivacy",
+    "revision": "r2",
+    "scope": "Reviewed declaration for this pinned source-built iOS curl integration; not an upstream manifest. App manifest updated in the same reviewed delta. Native aggregation remains unverified."
+  },
+  "licence_boundary": "GameRemote preserves AGPL-3.0-only and the existing OpenSSL additional permission plus upstream Chiaki attribution. Dependency dual-licence notices remain intact; this report makes no relicensing election or App Store legal-compatibility determination.",
+  "linked_third_party_components": [
+    {
+      "acquisition_url": "https://codeload.github.com/xiph/opus/tar.gz/ddbe48383984d56acd9e1ab6a090c54ca6b735a6",
+      "additional_notices": [
+        {
+          "path": "notices/opus-LICENSE_PLEASE_READ.txt",
+          "sha256": "7efb4989e0cd1b256229bdf2f09300c5d14e35db0e7476bfb87fac243498273d",
+          "upstream_member": "opus-ddbe48383984d56acd9e1ab6a090c54ca6b735a6/LICENSE_PLEASE_READ.txt"
+        }
+      ],
+      "archive_bytes": 4184347,
+      "archive_member_preflight": {
+        "case_unicode_collisions_found": 0,
+        "expanded_bytes": 14945985,
+        "member_count": 787,
+        "symlinks": [],
+        "unsafe_paths_found": 0
+      },
+      "archive_sha256": "18e9d9e26565e279753aafb6823a482ef85ea9fddbfdcdbff8fd095b12dd96b6",
+      "license_summary": "BSD-3-Clause with upstream IPR information",
+      "name": "Opus",
+      "notice": {
+        "path": "notices/opus-LICENSE.txt",
+        "sha256": "01e1167d54a096d123cf6dfbbeb19587278845c6481d2d66d545669846079551",
+        "source_member": "opus-ddbe48383984d56acd9e1ab6a090c54ca6b735a6/COPYING"
+      },
+      "public_fixture_files_count": 0,
+      "repository": "https://github.com/xiph/opus",
+      "retained_without_source_member_omissions": true,
+      "source_form": "unchanged upstream archive included",
+      "source_identity": {
+        "api_url": "https://api.github.com/repos/xiph/opus/git/commits/ddbe48383984d56acd9e1ab6a090c54ca6b735a6",
+        "commit": "ddbe48383984d56acd9e1ab6a090c54ca6b735a6",
+        "method": "Pinned commit confirmed by official repository Git API; archive bytes independently hashed",
+        "tree": "0aba3f87ec9da9f71045c215e13d2aa7c8abba7c"
+      },
+      "source_path": "vendor-sources/opus-ddbe48383984d56acd9e1ab6a090c54ca6b735a6.tar.gz",
+      "source_top_directory": "opus-ddbe48383984d56acd9e1ab6a090c54ca6b735a6",
+      "version_or_commit": "ddbe48383984d56acd9e1ab6a090c54ca6b735a6"
+    },
+    {
+      "acquisition_url": "https://codeload.github.com/libevent/libevent/tar.gz/5df3037d10556bfcb675bc73e516978b75fc7bc7",
+      "additional_notices": [],
+      "archive_bytes": 744072,
+      "archive_member_preflight": {
+        "case_unicode_collisions_found": 0,
+        "expanded_bytes": 3042277,
+        "member_count": 244,
+        "symlinks": [],
+        "unsafe_paths_found": 0
+      },
+      "archive_sha256": "ce3018de962b9c5918364a1d81a856d2cab671e6c832ded429502445d3fe1b79",
+      "license_summary": "BSD-3-Clause and component notices in LICENSE",
+      "name": "libevent",
+      "notice": {
+        "path": "notices/libevent-LICENSE.txt",
+        "sha256": "ff02effc9b331edcdac387d198691bfa3e575e7d244ad10cb826aa51ef085670",
+        "source_member": "libevent-5df3037d10556bfcb675bc73e516978b75fc7bc7/LICENSE"
+      },
+      "public_fixture_files_count": 0,
+      "repository": "https://github.com/libevent/libevent",
+      "retained_without_source_member_omissions": true,
+      "source_form": "unchanged upstream archive included",
+      "source_identity": {
+        "api_url": "https://api.github.com/repos/libevent/libevent/git/commits/5df3037d10556bfcb675bc73e516978b75fc7bc7",
+        "commit": "5df3037d10556bfcb675bc73e516978b75fc7bc7",
+        "method": "Pinned commit confirmed by official repository Git API; archive bytes independently hashed",
+        "tree": "9b59b8aec360426931f641d0e58fe57d2e442bad"
+      },
+      "source_path": "vendor-sources/libevent-5df3037d10556bfcb675bc73e516978b75fc7bc7.tar.gz",
+      "source_top_directory": "libevent-5df3037d10556bfcb675bc73e516978b75fc7bc7",
+      "version_or_commit": "5df3037d10556bfcb675bc73e516978b75fc7bc7"
+    },
+    {
+      "acquisition_url": "https://codeload.github.com/json-c/json-c/tar.gz/b4c371fa0cbc4dcbaccc359ce9e957a22988fb34",
+      "additional_notices": [],
+      "archive_bytes": 364753,
+      "archive_member_preflight": {
+        "case_unicode_collisions_found": 0,
+        "expanded_bytes": 1764570,
+        "member_count": 276,
+        "symlinks": [
+          {
+            "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test4.test",
+            "target": "test_basic.test"
+          },
+          {
+            "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/testReplaceExisting.test",
+            "target": "test_basic.test"
+          },
+          {
+            "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_cast.test",
+            "target": "test_basic.test"
+          },
+          {
+            "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_charcase.test",
+            "target": "test_basic.test"
+          },
+          {
+            "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_compare.test",
+            "target": "test_basic.test"
+          },
+          {
+            "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_deep_copy.test",
+            "target": "test_basic.test"
+          },
+          {
+            "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_double_serializer.test",
+            "target": "test_basic.test"
+          },
+          {
+            "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_float.test",
+            "target": "test_basic.test"
+          },
+          {
+            "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_int_add.test",
+            "target": "test_basic.test"
+          },
+          {
+            "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_int_get.test",
+            "target": "test_basic.test"
+          },
+          {
+            "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_json_pointer.test",
+            "target": "test_basic.test"
+          },
+          {
+            "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_locale.test",
+            "target": "test_basic.test"
+          },
+          {
+            "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_null.test",
+            "target": "test_basic.test"
+          },
+          {
+            "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_object_iterator.test",
+            "target": "test_basic.test"
+          },
+          {
+            "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_parse.test",
+            "target": "test_basic.test"
+          },
+          {
+            "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_parse_int64.test",
+            "target": "test_basic.test"
+          },
+          {
+            "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_printbuf.test",
+            "target": "test_basic.test"
+          },
+          {
+            "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_set_serializer.test",
+            "target": "test_basic.test"
+          },
+          {
+            "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_set_value.test",
+            "target": "test_basic.test"
+          },
+          {
+            "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_strerror.test",
+            "target": "test_basic.test"
+          },
+          {
+            "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_util_file.test",
+            "target": "test_basic.test"
+          },
+          {
+            "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_visit.test",
+            "target": "test_basic.test"
+          }
+        ],
+        "unsafe_paths_found": 0
+      },
+      "archive_sha256": "30702363a780ab8a5a1f3dff6db3b86b6144ae333ce00a4be1fa6f978a68402e",
+      "license_summary": "MIT-style terms as supplied",
+      "name": "json-c",
+      "notice": {
+        "path": "notices/json-c-LICENSE.txt",
+        "sha256": "74c1e6ca5eba76b54d0ad00d4815c8315c1b3bc45ff99de61d103dc92486284c",
+        "source_member": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/COPYING"
+      },
+      "public_fixture_files_count": 0,
+      "repository": "https://github.com/json-c/json-c",
+      "retained_without_source_member_omissions": true,
+      "source_form": "unchanged upstream archive included",
+      "source_identity": {
+        "api_url": "https://api.github.com/repos/json-c/json-c/git/commits/b4c371fa0cbc4dcbaccc359ce9e957a22988fb34",
+        "commit": "b4c371fa0cbc4dcbaccc359ce9e957a22988fb34",
+        "method": "Pinned commit confirmed by official repository Git API; archive bytes independently hashed",
+        "tree": "eaf9421e909b1e07ff55762a2e1dbb9e1e26fd2e"
+      },
+      "source_path": "vendor-sources/json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34.tar.gz",
+      "source_top_directory": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34",
+      "version_or_commit": "b4c371fa0cbc4dcbaccc359ce9e957a22988fb34"
+    },
+    {
+      "acquisition_url": "https://codeload.github.com/miniupnp/miniupnp/tar.gz/b55145ec095652289a59c33603f3abafee898273",
+      "additional_notices": [],
+      "archive_bytes": 464407,
+      "archive_member_preflight": {
+        "case_unicode_collisions_found": 0,
+        "expanded_bytes": 1952578,
+        "member_count": 400,
+        "symlinks": [
+          {
+            "path": "miniupnp-b55145ec095652289a59c33603f3abafee898273/minissdpd/LICENSE",
+            "target": "../LICENSE"
+          },
+          {
+            "path": "miniupnp-b55145ec095652289a59c33603f3abafee898273/minissdpd/getifaddr.c",
+            "target": "../miniupnpd/getifaddr.c"
+          },
+          {
+            "path": "miniupnp-b55145ec095652289a59c33603f3abafee898273/minissdpd/getifaddr.h",
+            "target": "../miniupnpd/getifaddr.h"
+          },
+          {
+            "path": "miniupnp-b55145ec095652289a59c33603f3abafee898273/miniupnpc/LICENSE",
+            "target": "../LICENSE"
+          },
+          {
+            "path": "miniupnp-b55145ec095652289a59c33603f3abafee898273/miniupnpd/LICENSE",
+            "target": "../LICENSE"
+          }
+        ],
+        "unsafe_paths_found": 0
+      },
+      "archive_sha256": "7f7d18e9f2052076f5e2d60b023296dfffe92e6973ade8f0b1d458732e7d6455",
+      "license_summary": "BSD-3-Clause",
+      "name": "MiniUPnPc",
+      "notice": {
+        "path": "notices/miniupnp-LICENSE.txt",
+        "sha256": "7480ae23b082c05ad9823896163d78f3a96f1beadce51f29c96cf898545c27e5",
+        "source_member": "miniupnp-b55145ec095652289a59c33603f3abafee898273/LICENSE"
+      },
+      "public_fixture_files_count": 0,
+      "repository": "https://github.com/miniupnp/miniupnp",
+      "retained_without_source_member_omissions": true,
+      "source_form": "unchanged upstream archive included",
+      "source_identity": {
+        "api_url": "https://api.github.com/repos/miniupnp/miniupnp/git/commits/b55145ec095652289a59c33603f3abafee898273",
+        "commit": "b55145ec095652289a59c33603f3abafee898273",
+        "method": "Pinned commit confirmed by official repository Git API; archive bytes independently hashed",
+        "tree": "6838831eef5df8b09f8c50b57a324e52fc49b011"
+      },
+      "source_path": "vendor-sources/miniupnp-b55145ec095652289a59c33603f3abafee898273.tar.gz",
+      "source_top_directory": "miniupnp-b55145ec095652289a59c33603f3abafee898273",
+      "version_or_commit": "b55145ec095652289a59c33603f3abafee898273"
+    },
+    {
+      "acquisition_url": "https://github.com/Mbed-TLS/mbedtls/releases/download/mbedtls-3.6.7/mbedtls-3.6.7.tar.bz2",
+      "additional_notices": [
+        {
+          "path": "notices/mbedtls-framework-LICENSE",
+          "sha256": "11402351e38392230bb8934ba1095c0c0049a296c0f8821f76e4672dff54b490",
+          "upstream_member": "mbedtls-3.6.7/framework/LICENSE"
+        }
+      ],
+      "archive_bytes": 5473689,
+      "archive_member_preflight": {
+        "case_unicode_collisions_found": 0,
+        "expanded_bytes": 47433926,
+        "member_count": 2039,
+        "symlinks": [],
+        "unsafe_paths_found": 0
+      },
+      "archive_sha256": "a7e8bcbec0e6f761b4af24f25677626b35f762f68eef79c08677a363212d11f6",
+      "license_summary": "Apache-2.0 OR GPL-2.0-or-later; unchanged dual-licence text retained",
+      "name": "Mbed TLS",
+      "notice": {
+        "path": "notices/mbedtls-LICENSE.txt",
+        "sha256": "9b405ef4c89342f5eae1dd828882f931747f71001cfba7d114801039b52ad09b",
+        "source_member": "mbedtls-3.6.7/LICENSE"
+      },
+      "public_fixture_files_count": 756,
+      "repository": "https://github.com/Mbed-TLS/mbedtls",
+      "retained_without_source_member_omissions": true,
+      "source_form": "unchanged upstream archive included",
+      "source_identity": {
+        "method": "Official release URL and checksum-pinned archive"
+      },
+      "source_path": "vendor-sources/mbedtls-3.6.7.tar.bz2",
+      "source_top_directory": "mbedtls-3.6.7",
+      "version_or_commit": "3.6.7"
+    },
+    {
+      "acquisition_url": "https://github.com/curl/curl/tree/b1ef0e1a01c0bb6ee5367bd9c186a603bde3615a",
+      "license_summary": "curl licence and per-file notices",
+      "name": "curl",
+      "notice": {
+        "path": "notices/curl-LICENSE.txt",
+        "sha256": "adb1fc06547fd136244179809f7b7c2d2ae6c4534f160aa513af9b6a12866a32",
+        "source_path": "third-party/curl/COPYING"
+      },
+      "public_fixture_policy": "Known public curl cryptographic test fixtures retained only at the exact preapproved source path/object ID; private signing assets are not included.",
+      "reported_upstream_commit": "b1ef0e1a01c0bb6ee5367bd9c186a603bde3615a",
+      "repository": "https://github.com/curl/curl",
+      "source_form": "complete tracked vendor tree included as Git blob bytes",
+      "source_path": "third-party/curl",
+      "upstream_pin_basis": "Existing iOS release source documentation; exact delivered per-file Git object IDs and SHA-256 are recorded in SOURCE-MANIFEST.json. No claim that a new independent upstream checkout comparison was performed."
+    },
+    {
+      "acquisition_url": "https://github.com/nanopb/nanopb/tree/cad3c18ef15a663e30e3e43e3a752b66378adec1",
+      "license_summary": "zlib",
+      "name": "nanopb",
+      "notice": {
+        "path": "notices/nanopb-LICENSE.txt",
+        "sha256": "e2f2fc8fe3faa7dcb09dbe995db48c6ec5c1f72705db915101e4a83fed44f66d",
+        "source_path": "third-party/nanopb/LICENSE.txt"
+      },
+      "public_fixture_policy": null,
+      "reported_upstream_commit": "cad3c18ef15a663e30e3e43e3a752b66378adec1",
+      "repository": "https://github.com/nanopb/nanopb",
+      "source_form": "complete tracked vendor tree included as Git blob bytes",
+      "source_path": "third-party/nanopb",
+      "upstream_pin_basis": "Existing iOS release source documentation; exact delivered per-file Git object IDs and SHA-256 are recorded in SOURCE-MANIFEST.json. No claim that a new independent upstream checkout comparison was performed."
+    },
+    {
+      "acquisition_url": "https://github.com/streetpea/gf-complete/tree/fa54a4670a5705c84abf6c24b92b0cd479625478",
+      "license_summary": "BSD-3-Clause",
+      "name": "GF-Complete",
+      "notice": {
+        "path": "notices/gf-complete-LICENSE.txt",
+        "sha256": "cb9790699b4a3d56a43bba1dd859f7f41361cd224e8745a24eef933ea134a280",
+        "source_path": "third-party/gf-complete/COPYING"
+      },
+      "public_fixture_policy": null,
+      "reported_upstream_commit": "fa54a4670a5705c84abf6c24b92b0cd479625478",
+      "repository": "https://github.com/streetpea/gf-complete",
+      "source_form": "complete tracked vendor tree included as Git blob bytes",
+      "source_path": "third-party/gf-complete",
+      "upstream_pin_basis": "Existing iOS release source documentation; exact delivered per-file Git object IDs and SHA-256 are recorded in SOURCE-MANIFEST.json. No claim that a new independent upstream checkout comparison was performed."
+    },
+    {
+      "acquisition_url": "https://github.com/streetpea/jerasure/tree/505ccb4bc69eee8d7ea40a6089a056b99671134f",
+      "license_summary": "BSD-3-Clause",
+      "name": "Jerasure",
+      "notice": {
+        "path": "notices/jerasure-LICENSE.txt",
+        "sha256": "83b6b3ff237848fbccfa889bb52cfb13c331c1f83544b907617c7f8f31eb1769",
+        "source_path": "third-party/jerasure/COPYING"
+      },
+      "public_fixture_policy": null,
+      "reported_upstream_commit": "505ccb4bc69eee8d7ea40a6089a056b99671134f",
+      "repository": "https://github.com/streetpea/jerasure",
+      "source_form": "complete tracked vendor tree included as Git blob bytes",
+      "source_path": "third-party/jerasure",
+      "upstream_pin_basis": "Existing iOS release source documentation; exact delivered per-file Git object IDs and SHA-256 are recorded in SOURCE-MANIFEST.json. No claim that a new independent upstream checkout comparison was performed."
+    }
+  ],
+  "notice_assembly": {
+    "build2_comparison_is_notice_only": true,
+    "matches_retained_build2_notice_bytes": true,
+    "path": "notices/ThirdPartyNotices.txt",
+    "sha256": "1a30f82159956b3e9535b578ea28b4a49330cd391a26056c18c7ac0f502f1bbb"
+  },
+  "runtime_backend_scope": "Native VideoToolbox/AVFoundation; Mbed TLS for the Chiaki protocol, Apple SecureTransport for curl. Qt, FFmpeg, SDL and OpenSSL are not selected by the iOS CMake profile.",
+  "schema_version": 1,
+  "source_closure_status": "VERIFIED_IN_DELIVERED_ARCHIVE: all nine linked third-party source inputs are present, four complete tracked vendor trees and five unchanged upstream archives. Toolchains/system frameworks remain external. Native execution and legal corresponding-source qualification are separate.",
+  "system_dependency_limit": "Apple SDK, system framework implementations, Xcode, CMake, Python/protobuf and protoc are external toolchain inputs, not bundled app-source components."
+}

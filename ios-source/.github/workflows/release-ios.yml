@@ -1,0 +1,126 @@
+name: iOS native verification
+on:
+  workflow_dispatch:
+    inputs:
+      continue_candidate:
+        description: Verify build 2 or finish its device build without rebuilding the simulator
+        type: boolean
+        default: false
+      candidate_target:
+        description: Candidate verification job to run
+        type: choice
+        options: [simulators, iphone, ipad, device, all]
+        default: simulators
+  pull_request:
+    paths: ['ios/**', 'lib/**', 'third-party/**', 'cmake/**', 'scripts/release/*.py', 'CMakeLists.txt', '.github/workflows/release-ios.yml', '.github/workflows/ios-candidate-checks.yml']
+permissions:
+  contents: read
+jobs:
+  candidate-verification:
+    if: inputs.continue_candidate
+    permissions:
+      contents: read
+      actions: read
+    uses: ./.github/workflows/ios-candidate-checks.yml
+    with:
+      target: ${{ inputs.candidate_target }}
+  device-build:
+    if: ${{ !inputs.continue_candidate }}
+    permissions:
+      contents: read
+      actions: read
+    uses: ./.github/workflows/ios-candidate-checks.yml
+    with:
+      target: device
+      source_commit: ${{ github.sha }}
+  simulator-verification:
+    needs: simulator-build
+    if: ${{ !inputs.continue_candidate }}
+    permissions:
+      contents: read
+      actions: read
+    uses: ./.github/workflows/ios-candidate-checks.yml
+    with:
+      target: simulators
+      source_commit: ${{ github.sha }}
+      simulator_build_run: ${{ format('{0}', github.run_id) }}
+      simulator_archive_sha256: ${{ needs.simulator-build.outputs.archive_sha256 }}
+  simulator-build:
+    if: ${{ !inputs.continue_candidate }}
+    runs-on: macos-15
+    timeout-minutes: 35
+    outputs:
+      archive_sha256: ${{ steps.package.outputs.archive_sha256 }}
+    env:
+      CMAKE_BUILD_PARALLEL_LEVEL: '2'
+      # macos-15 defaults to Xcode 16.4, which is below Apple's upload minimum.
+      DEVELOPER_DIR: /Applications/Xcode_26.3.app/Contents/Developer
+      SMOKE_IOS_VERSION: '26.2'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install host protobuf generators
+        run: |
+          # The runner context is unavailable in job-level env; export the tool paths for later steps here.
+          CHIAKI_HOST_PYTHON="$RUNNER_TEMP/chiaki-codegen/bin/python3"
+          CHIAKI_HOST_PROTOC="$RUNNER_TEMP/protoc-29.6/bin/protoc"
+          echo "CHIAKI_HOST_PYTHON=$CHIAKI_HOST_PYTHON" >> "$GITHUB_ENV"
+          echo "CHIAKI_HOST_PROTOC=$CHIAKI_HOST_PROTOC" >> "$GITHUB_ENV"
+          python3 -m venv "$RUNNER_TEMP/chiaki-codegen"
+          "$CHIAKI_HOST_PYTHON" -m pip install --disable-pip-version-check protobuf==5.29.6 cmake==3.31.6
+          curl --fail --location --silent --show-error https://github.com/protocolbuffers/protobuf/releases/download/v29.6/protoc-29.6-osx-universal_binary.zip -o "$RUNNER_TEMP/protoc-29.6.zip"
+          echo "8ff5d44fd913d4cb29d5a000cb3835624cd5b7f113a4c94ce151bfa0ae9aab25  $RUNNER_TEMP/protoc-29.6.zip" | shasum -a 256 --check
+          unzip -q "$RUNNER_TEMP/protoc-29.6.zip" -d "$RUNNER_TEMP/protoc-29.6"
+          echo "$RUNNER_TEMP/protoc-29.6/bin" >> "$GITHUB_PATH"
+          echo "$RUNNER_TEMP/chiaki-codegen/bin" >> "$GITHUB_PATH"
+          "$CHIAKI_HOST_PYTHON" scripts/release/verify_host_tools.py --python "$CHIAKI_HOST_PYTHON" --protoc "$CHIAKI_HOST_PROTOC"
+      - name: Host tool-selection safeguards
+        run: python3 scripts/release/test_verify_host_tools.py
+      - name: Host lifecycle, storage, input and source checks
+        run: ios/scripts/test-host.sh
+      - name: Build deadline safeguards
+        run: python3 ios/tests/test_run_bounded.py
+      - name: Toolchain
+        run: |
+          xcodebuild -version
+          xcrun --sdk iphonesimulator --show-sdk-version
+          test "$(xcodebuild -version | head -n 1)" = 'Xcode 26.3'
+          test "$(xcrun --sdk iphoneos --show-sdk-version)" = '26.2'
+          test "$(xcrun --sdk iphonesimulator --show-sdk-version)" = '26.2'
+          swift --version
+          uname -m
+          sysctl -n hw.memsize hw.logicalcpu
+          df -Pk "$RUNNER_TEMP"
+      - name: Typecheck app sources against the iOS simulator SDK
+        run: ios/scripts/typecheck-ios.sh
+      - name: Build unsigned iOS simulator app
+        run: python3 ios/scripts/run-bounded.py --stall 300 --limit 1200 --log ios/build/logs/simulator-build.log -- ios/scripts/build.sh iphonesimulator
+      - name: Package and round-trip simulator app
+        id: package
+        run: |
+          sh ios/scripts/package-app.sh iphonesimulator
+          archive_sha256=$(shasum -a 256 ios/build/packages/GameRemote-iOS-simulator.tar.gz | cut -d ' ' -f 1)
+          echo "archive_sha256=$archive_sha256" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: GameRemote-iOS-simulator
+          path: ios/build/packages/GameRemote-iOS-simulator.tar.gz*
+          if-no-files-found: error
+      - name: Required-reason API imports of the built app
+        run: ios/scripts/required-reason-scan.sh | tee ios/build/required-reason-scan.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ios-simulator-evidence
+          path: |
+            ios/build/simulator-evidence
+            ios/build/ui-evidence
+            ios/build/required-reason-scan.txt
+            ios/build/logs
+            ios/build/*/CMakeFiles/CMakeConfigureLog.yaml
+          if-no-files-found: warn
+# No TestFlight/App Store upload or signing; those require separate authorized release credentials.

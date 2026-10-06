@@ -1,0 +1,242 @@
+{
+  "archives": [
+    {
+      "archive": "opus-ddbe48383984d56acd9e1ab6a090c54ca6b735a6.tar.gz",
+      "contents_extracted": false,
+      "links": [],
+      "member_count": 787,
+      "name": "opus",
+      "path_type_collision_and_link_checks": "PASS",
+      "symlinks_checked": 0
+    },
+    {
+      "archive": "libevent-5df3037d10556bfcb675bc73e516978b75fc7bc7.tar.gz",
+      "contents_extracted": false,
+      "links": [],
+      "member_count": 244,
+      "name": "libevent",
+      "path_type_collision_and_link_checks": "PASS",
+      "symlinks_checked": 0
+    },
+    {
+      "archive": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34.tar.gz",
+      "contents_extracted": false,
+      "links": [
+        {
+          "contained": true,
+          "dangling": false,
+          "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test4.test",
+          "resolved_target": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_basic.test",
+          "target": "test_basic.test"
+        },
+        {
+          "contained": true,
+          "dangling": false,
+          "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/testReplaceExisting.test",
+          "resolved_target": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_basic.test",
+          "target": "test_basic.test"
+        },
+        {
+          "contained": true,
+          "dangling": false,
+          "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_cast.test",
+          "resolved_target": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_basic.test",
+          "target": "test_basic.test"
+        },
+        {
+          "contained": true,
+          "dangling": false,
+          "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_charcase.test",
+          "resolved_target": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_basic.test",
+          "target": "test_basic.test"
+        },
+        {
+          "contained": true,
+          "dangling": false,
+          "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_compare.test",
+          "resolved_target": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_basic.test",
+          "target": "test_basic.test"
+        },
+        {
+          "contained": true,
+          "dangling": false,
+          "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_deep_copy.test",
+          "resolved_target": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_basic.test",
+          "target": "test_basic.test"
+        },
+        {
+          "contained": true,
+          "dangling": false,
+          "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_double_serializer.test",
+          "resolved_target": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_basic.test",
+          "target": "test_basic.test"
+        },
+        {
+          "contained": true,
+          "dangling": false,
+          "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_float.test",
+          "resolved_target": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_basic.test",
+          "target": "test_basic.test"
+        },
+        {
+          "contained": true,
+          "dangling": false,
+          "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_int_add.test",
+          "resolved_target": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_basic.test",
+          "target": "test_basic.test"
+        },
+        {
+          "contained": true,
+          "dangling": false,
+          "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_int_get.test",
+          "resolved_target": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_basic.test",
+          "target": "test_basic.test"
+        },
+        {
+          "contained": true,
+          "dangling": false,
+          "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_json_pointer.test",
+          "resolved_target": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_basic.test",
+          "target": "test_basic.test"
+        },
+        {
+          "contained": true,
+          "dangling": false,
+          "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_locale.test",
+          "resolved_target": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_basic.test",
+          "target": "test_basic.test"
+        },
+        {
+          "contained": true,
+          "dangling": false,
+          "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_null.test",
+          "resolved_target": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_basic.test",
+          "target": "test_basic.test"
+        },
+        {
+          "contained": true,
+          "dangling": false,
+          "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_object_iterator.test",
+          "resolved_target": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_basic.test",
+          "target": "test_basic.test"
+        },
+        {
+          "contained": true,
+          "dangling": false,
+          "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_parse.test",
+          "resolved_target": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_basic.test",
+          "target": "test_basic.test"
+        },
+        {
+          "contained": true,
+          "dangling": false,
+          "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_parse_int64.test",
+          "resolved_target": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_basic.test",
+          "target": "test_basic.test"
+        },
+        {
+          "contained": true,
+          "dangling": false,
+          "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_printbuf.test",
+          "resolved_target": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_basic.test",
+          "target": "test_basic.test"
+        },
+        {
+          "contained": true,
+          "dangling": false,
+          "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_set_serializer.test",
+          "resolved_target": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_basic.test",
+          "target": "test_basic.test"
+        },
+        {
+          "contained": true,
+          "dangling": false,
+          "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_set_value.test",
+          "resolved_target": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_basic.test",
+          "target": "test_basic.test"
+        },
+        {
+          "contained": true,
+          "dangling": false,
+          "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_strerror.test",
+          "resolved_target": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_basic.test",
+          "target": "test_basic.test"
+        },
+        {
+          "contained": true,
+          "dangling": false,
+          "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_util_file.test",
+          "resolved_target": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_basic.test",
+          "target": "test_basic.test"
+        },
+        {
+          "contained": true,
+          "dangling": false,
+          "path": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_visit.test",
+          "resolved_target": "json-c-b4c371fa0cbc4dcbaccc359ce9e957a22988fb34/tests/test_basic.test",
+          "target": "test_basic.test"
+        }
+      ],
+      "member_count": 276,
+      "name": "json-c",
+      "path_type_collision_and_link_checks": "PASS",
+      "symlinks_checked": 22
+    },
+    {
+      "archive": "miniupnp-b55145ec095652289a59c33603f3abafee898273.tar.gz",
+      "contents_extracted": false,
+      "links": [
+        {
+          "contained": true,
+          "dangling": false,
+          "path": "miniupnp-b55145ec095652289a59c33603f3abafee898273/minissdpd/LICENSE",
+          "resolved_target": "miniupnp-b55145ec095652289a59c33603f3abafee898273/LICENSE",
+          "target": "../LICENSE"
+        },
+        {
+          "contained": true,
+          "dangling": false,
+          "path": "miniupnp-b55145ec095652289a59c33603f3abafee898273/minissdpd/getifaddr.c",
+          "resolved_target": "miniupnp-b55145ec095652289a59c33603f3abafee898273/miniupnpd/getifaddr.c",
+          "target": "../miniupnpd/getifaddr.c"
+        },
+        {
+          "contained": true,
+          "dangling": false,
+          "path": "miniupnp-b55145ec095652289a59c33603f3abafee898273/minissdpd/getifaddr.h",
+          "resolved_target": "miniupnp-b55145ec095652289a59c33603f3abafee898273/miniupnpd/getifaddr.h",
+          "target": "../miniupnpd/getifaddr.h"
+        },
+        {
+          "contained": true,
+          "dangling": false,
+          "path": "miniupnp-b55145ec095652289a59c33603f3abafee898273/miniupnpc/LICENSE",
+          "resolved_target": "miniupnp-b55145ec095652289a59c33603f3abafee898273/LICENSE",
+          "target": "../LICENSE"
+        },
+        {
+          "contained": true,
+          "dangling": false,
+          "path": "miniupnp-b55145ec095652289a59c33603f3abafee898273/miniupnpd/LICENSE",
+          "resolved_target": "miniupnp-b55145ec095652289a59c33603f3abafee898273/LICENSE",
+          "target": "../LICENSE"
+        }
+      ],
+      "member_count": 400,
+      "name": "miniupnp",
+      "path_type_collision_and_link_checks": "PASS",
+      "symlinks_checked": 5
+    },
+    {
+      "archive": "mbedtls-3.6.7.tar.bz2",
+      "contents_extracted": false,
+      "links": [],
+      "member_count": 2039,
+      "name": "mbedtls",
+      "path_type_collision_and_link_checks": "PASS",
+      "symlinks_checked": 0
+    }
+  ],
+  "scope": "Metadata checks on all five unchanged included upstream source archives, including full ancestor and symlink-target checks using the existing reviewed path helper. No upstream source-tree extraction or native build.",
+  "status": "PASS"
+}

@@ -1,0 +1,13 @@
+if(NOT TARGET opus)
+  message(FATAL_ERROR "Pinned ios_opus must be configured before the core")
+endif()
+set(Opus_FOUND TRUE)
+set(Opus_INCLUDE_DIRS "${ios_opus_SOURCE_DIR}/include;${ios_opus_SOURCE_DIR}/..")
+# Core uses <opus/opus.h>; provide a scoped prefix instead of a host include path.
+set(_opus_prefix "${CMAKE_BINARY_DIR}/ios-opus-include")
+file(MAKE_DIRECTORY "${_opus_prefix}")
+if(NOT EXISTS "${_opus_prefix}/opus")
+  file(CREATE_LINK "${ios_opus_SOURCE_DIR}/include" "${_opus_prefix}/opus" SYMBOLIC)
+endif()
+set(Opus_INCLUDE_DIRS "${_opus_prefix}")
+set(Opus_LIBRARIES opus)

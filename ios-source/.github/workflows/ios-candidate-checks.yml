@@ -1,0 +1,157 @@
+name: iOS candidate continuation
+on:
+  workflow_call:
+    inputs:
+      target:
+        type: string
+        default: all
+      source_commit:
+        type: string
+        default: 7e9e397e07f677282beb1af76448d587f79f300e
+      simulator_build_run:
+        type: string
+        default: '37425045962'
+      simulator_archive_sha256:
+        type: string
+        default: 66d002e3f45e3cd22800c3c9ce683a9a7b46977a8fb8aa68bd2bc5cdaafa7853
+permissions:
+  contents: read
+  actions: read
+jobs:
+  verify:
+    name: Verify ${{ matrix.target }}
+    runs-on: macos-15
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        target: ${{ fromJSON(inputs.target == 'all' && '["iphone","ipad","device"]' || inputs.target == 'simulators' && '["iphone","ipad"]' || format('["{0}"]', inputs.target)) }}
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.3.app/Contents/Developer
+      SMOKE_IOS_VERSION: '26.2'
+      CMAKE_BUILD_PARALLEL_LEVEL: '2'
+      REQUESTED_TARGET: ${{ inputs.target }}
+      # The source guard rejects any change to the compiled app's production inputs.
+      SOURCE_COMMIT: ${{ inputs.source_commit }}
+      SIMULATOR_BUILD_RUN: ${{ inputs.simulator_build_run }}
+      SIMULATOR_ARCHIVE_SHA256: ${{ inputs.simulator_archive_sha256 }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Require the same production source and artifact producer
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          case "$REQUESTED_TARGET" in all|simulators|iphone|ipad|device) ;; *) echo 'Invalid candidate target' >&2; exit 2;; esac
+          git fetch --no-tags --depth=1 origin "$SOURCE_COMMIT"
+          # Only verification harnesses and release records may differ from the built app.
+          git diff --exit-code "$SOURCE_COMMIT" HEAD -- . \
+            ':(exclude).github/workflows/**' \
+            ':(exclude)ios/scripts/simulator-smoke.sh' \
+            ':(exclude)ios/scripts/simulator-ui.sh' \
+            ':(exclude)ios/tests/**' \
+            ':(exclude)ios/VALIDATION.md' \
+            ':(exclude)docs/release/ios.md'
+          xcodebuild -version
+          test "$(xcodebuild -version | head -n 1)" = 'Xcode 26.3'
+          test "$(xcrun --sdk iphoneos --show-sdk-version)" = '26.2'
+          test "$(xcrun --sdk iphonesimulator --show-sdk-version)" = '26.2'
+      - name: Verify simulator artifact provenance
+        if: matrix.target != 'device'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ "$SIMULATOR_BUILD_RUN" = "$GITHUB_RUN_ID" ]; then
+            # Same-run artifacts come from the completed build dependency. On PRs,
+            # GITHUB_SHA is the tested merge commit, not necessarily the PR head.
+            test "$SOURCE_COMMIT" = "$GITHUB_SHA"
+          else
+            test "$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$SIMULATOR_BUILD_RUN" --jq .head_sha)" = "$SOURCE_COMMIT"
+          fi
+      - name: Check simulator selection and production-source reuse safeguards
+        run: python3 ios/tests/test_candidate_workflow.py
+      - name: Download the verified simulator archive
+        if: matrix.target != 'device'
+        uses: actions/download-artifact@v4
+        with:
+          name: GameRemote-iOS-simulator
+          path: ios/build/packages
+          github-token: ${{ github.token }}
+          run-id: ${{ env.SIMULATOR_BUILD_RUN }}
+      - name: Verify and extract the simulator archive
+        if: matrix.target != 'device'
+        run: |
+          echo "$SIMULATOR_ARCHIVE_SHA256  ios/build/packages/GameRemote-iOS-simulator.tar.gz" | shasum -a 256 --check
+          mkdir -p ios/build/package-verification/iphonesimulator
+          tar -xzf ios/build/packages/GameRemote-iOS-simulator.tar.gz -C ios/build/package-verification/iphonesimulator
+          test -x ios/build/package-verification/iphonesimulator/GameRemote.app/GameRemote
+      - name: Launch and capture the selected simulator family
+        if: matrix.target != 'device'
+        env:
+          SMOKE_DEVICE_KIND: ${{ matrix.target }}
+        run: python3 ios/scripts/run-bounded.py --stall 240 --limit 600 --log ios/build/logs/simulator-smoke.log -- ios/scripts/simulator-smoke.sh ios/build/package-verification/iphonesimulator/GameRemote.app
+      - uses: actions/setup-java@v4
+        if: matrix.target != 'device'
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Install the checksum-pinned local UI driver
+        if: matrix.target != 'device'
+        run: |
+          curl --fail --location --silent --show-error https://github.com/mobile-dev-inc/Maestro/releases/download/cli-2.11.0/maestro.zip -o "$RUNNER_TEMP/maestro.zip"
+          echo "5384593cb4e7a106489e75a821d157dd43f4e438df6bc308b72e82c685e1283a  $RUNNER_TEMP/maestro.zip" | shasum -a 256 --check
+          unzip -q "$RUNNER_TEMP/maestro.zip" -d "$RUNNER_TEMP/maestro-cli"
+          chmod +x "$RUNNER_TEMP/maestro-cli/maestro/bin/maestro"
+          echo "$RUNNER_TEMP/maestro-cli/maestro/bin" >> "$GITHUB_PATH"
+      - name: Exercise registration validation, settings, help and licences
+        if: matrix.target != 'device'
+        run: python3 ios/scripts/run-bounded.py --stall 300 --limit 900 --log ios/build/logs/simulator-ui.log -- sh ios/scripts/simulator-ui.sh
+      - name: Install pinned host generators for the device build
+        if: matrix.target == 'device'
+        run: |
+          CHIAKI_HOST_PYTHON="$RUNNER_TEMP/chiaki-codegen/bin/python3"
+          CHIAKI_HOST_PROTOC="$RUNNER_TEMP/protoc-29.6/bin/protoc"
+          echo "CHIAKI_HOST_PYTHON=$CHIAKI_HOST_PYTHON" >> "$GITHUB_ENV"
+          echo "CHIAKI_HOST_PROTOC=$CHIAKI_HOST_PROTOC" >> "$GITHUB_ENV"
+          python3 -m venv "$RUNNER_TEMP/chiaki-codegen"
+          "$CHIAKI_HOST_PYTHON" -m pip install --disable-pip-version-check protobuf==5.29.6 cmake==3.31.6
+          curl --fail --location --silent --show-error https://github.com/protocolbuffers/protobuf/releases/download/v29.6/protoc-29.6-osx-universal_binary.zip -o "$RUNNER_TEMP/protoc-29.6.zip"
+          echo "8ff5d44fd913d4cb29d5a000cb3835624cd5b7f113a4c94ce151bfa0ae9aab25  $RUNNER_TEMP/protoc-29.6.zip" | shasum -a 256 --check
+          unzip -q "$RUNNER_TEMP/protoc-29.6.zip" -d "$RUNNER_TEMP/protoc-29.6"
+          echo "$RUNNER_TEMP/protoc-29.6/bin" >> "$GITHUB_PATH"
+          echo "$RUNNER_TEMP/chiaki-codegen/bin" >> "$GITHUB_PATH"
+          "$CHIAKI_HOST_PYTHON" scripts/release/verify_host_tools.py --python "$CHIAKI_HOST_PYTHON" --protoc "$CHIAKI_HOST_PROTOC"
+      - name: Build unsigned physical-device Release app
+        if: matrix.target == 'device'
+        env:
+          GR_IOS_CONFIGURATION: Release
+        # The build-2 Release run reached app assets while compiling actively at
+        # the former 20-minute cap. Keep the stall and 35-minute job limits.
+        run: python3 ios/scripts/run-bounded.py --stall 300 --limit 1800 --log ios/build/logs/device-build.log -- ios/scripts/build.sh iphoneos
+      - name: Package and round-trip unsigned device app
+        if: matrix.target == 'device'
+        run: sh ios/scripts/package-app.sh iphoneos
+      - name: Report required-reason API imports in the device app
+        if: matrix.target == 'device'
+        run: ios/scripts/required-reason-scan.sh ios/build/package-verification/iphoneos/GameRemote.app | tee ios/build/required-reason-scan.txt
+      - uses: actions/upload-artifact@v4
+        if: matrix.target == 'device'
+        with:
+          name: GameRemote-iOS-device-unsigned
+          path: ios/build/packages/GameRemote-iOS-device-unsigned.tar.gz*
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ios-candidate-${{ matrix.target }}-evidence
+          path: |
+            ios/build/simulator-evidence
+            ios/build/ui-evidence
+            ios/build/logs
+            ios/build/required-reason-scan.txt
+            ios/build/*/CMakeFiles/CMakeConfigureLog.yaml
+          if-no-files-found: warn

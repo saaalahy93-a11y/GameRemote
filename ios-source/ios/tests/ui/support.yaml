@@ -1,0 +1,33 @@
+appId: org.example.RemotePlayPrototype.iOS
+name: Settings and bundled licences
+---
+- launchApp:
+    clearState: true
+- tapOn:
+    id: home.settings
+- assertVisible: "Stream profile"
+- assertVisible: "(?s).*Resolution.*720p.*"
+- takeScreenshot: settings
+- scrollUntilVisible:
+    element:
+      id: settings.licences
+    direction: DOWN
+- tapOn:
+    id: settings.licences
+- assertVisible: "Credits"
+- assertVisible: "GameRemote licence.*"
+- assertNotVisible: "This text is missing from the app bundle.*"
+- takeScreenshot: licences
+- stopApp
+- launchApp
+- tapOn:
+    id: home.settings
+- scrollUntilVisible:
+    element:
+      id: settings.help
+    direction: DOWN
+- tapOn:
+    id: settings.help
+- assertVisible: "Before you start"
+- assertVisible: "Turn on Remote Play"
+- takeScreenshot: setup-help

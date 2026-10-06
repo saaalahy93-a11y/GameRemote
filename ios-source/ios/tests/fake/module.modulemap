@@ -1,0 +1,1 @@
+module FakeBridge { header "FakeBridge.h" export * }

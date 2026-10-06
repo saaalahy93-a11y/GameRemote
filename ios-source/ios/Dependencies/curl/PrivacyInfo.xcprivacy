@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+<key>NSPrivacyTracking</key><false/>
+<key>NSPrivacyTrackingDomains</key><array/>
+<key>NSPrivacyCollectedDataTypes</key><array/>
+<key>NSPrivacyAccessedAPITypes</key><array>
+<!-- GameRemote's iOS integration only; see docs/release/ios-store-profile.md.
+     Covers retained optional curl file-metadata routines. The current bridge
+     does not configure curl's file-backed features. Any such use is limited
+     to app-container files under C617.1; this is not a general curl manifest. -->
+<dict><key>NSPrivacyAccessedAPIType</key><string>NSPrivacyAccessedAPICategoryFileTimestamp</string>
+<key>NSPrivacyAccessedAPITypeReasons</key><array><string>C617.1</string></array></dict>
+</array>
+</dict></plist>

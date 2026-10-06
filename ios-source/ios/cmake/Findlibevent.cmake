@@ -1,0 +1,6 @@
+if(NOT TARGET event_core_static OR NOT TARGET event_extra_static)
+  message(FATAL_ERROR "Pinned libevent static targets are required")
+endif()
+set(libevent_FOUND TRUE)
+set(LIBEVENT_INCLUDE_DIRS "${ios_event_SOURCE_DIR}/include;${ios_event_BINARY_DIR}/include")
+set(LIBEVENT_LIBRARIES event_core_static event_extra_static)

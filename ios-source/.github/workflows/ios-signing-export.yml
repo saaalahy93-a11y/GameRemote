@@ -1,0 +1,98 @@
+name: iOS manual signing and local export
+on:
+  workflow_dispatch:
+    inputs:
+      execute_signing:
+        description: Explicitly authorize signing and local IPA export using the configured ios-signing environment
+        type: boolean
+        default: false
+      mode:
+        description: Development device installation or store distribution export
+        type: choice
+        options: [development, store]
+        default: development
+      version:
+        description: Owner-selected three-part marketing version
+        type: string
+        required: true
+      build_number:
+        description: Owner-selected new build number
+        type: string
+        required: true
+permissions:
+  contents: read
+concurrency:
+  group: ios-manual-signing-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  export:
+    # Artifacts inherit repository read access. Never put a signed IPA in a public repo.
+    if: github.event_name == 'workflow_dispatch' && inputs.execute_signing && github.event.repository.private
+    environment: ios-signing
+    runs-on: macos-15
+    timeout-minutes: 50
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.3.app/Contents/Developer
+      CMAKE_BUILD_PARALLEL_LEVEL: '2'
+      PYTHONDONTWRITEBYTECODE: '1'
+      SIGNING_MODE: ${{ inputs.mode }}
+      GR_IOS_BUNDLE_IDENTIFIER: com.ahmedalsalahy.gameremote
+      GR_IOS_DEVELOPMENT_TEAM: 4J27D8LXNK
+      GR_IOS_VERSION: ${{ inputs.version }}
+      GR_IOS_BUILD_NUMBER: ${{ inputs.build_number }}
+      GR_IOS_PRIVACY_URL: ${{ vars.GR_IOS_PRIVACY_URL }}
+      GR_IOS_SUPPORT_URL: ${{ vars.GR_IOS_SUPPORT_URL }}
+      GR_IOS_SOURCE_URL: ${{ vars.GR_IOS_SOURCE_URL }}
+      GR_IOS_EXPORT_CLASSIFICATION: ${{ vars.GR_IOS_EXPORT_CLASSIFICATION }}
+      GR_IOS_SIGNING_IDENTITY: ${{ vars.GR_IOS_SIGNING_IDENTITY }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate public inputs without reading signing credentials
+        run: python3 ios/scripts/sign-and-export.py --mode "$SIGNING_MODE"
+      - name: Install bounded pinned host generators
+        run: |
+          # Expand runner paths in the bounded child shell, not its parent.
+          # shellcheck disable=SC2016
+          python3 ios/scripts/run-bounded.py --stall 120 --limit 300 --log "$RUNNER_TEMP/signing-host-setup.log" -- bash -eu -c '
+            CHIAKI_HOST_PYTHON="$RUNNER_TEMP/chiaki-codegen/bin/python3"
+            CHIAKI_HOST_PROTOC="$RUNNER_TEMP/protoc-29.6/bin/protoc"
+            echo "CHIAKI_HOST_PYTHON=$CHIAKI_HOST_PYTHON" >> "$GITHUB_ENV"
+            echo "CHIAKI_HOST_PROTOC=$CHIAKI_HOST_PROTOC" >> "$GITHUB_ENV"
+            python3 -m venv "$RUNNER_TEMP/chiaki-codegen"
+            "$CHIAKI_HOST_PYTHON" -m pip install --disable-pip-version-check protobuf==5.29.6 cmake==3.31.6
+            curl --fail --location --silent --show-error --connect-timeout 20 --max-time 120 https://github.com/protocolbuffers/protobuf/releases/download/v29.6/protoc-29.6-osx-universal_binary.zip -o "$RUNNER_TEMP/protoc-29.6.zip"
+            echo "8ff5d44fd913d4cb29d5a000cb3835624cd5b7f113a4c94ce151bfa0ae9aab25  $RUNNER_TEMP/protoc-29.6.zip" | shasum -a 256 --check
+            unzip -q "$RUNNER_TEMP/protoc-29.6.zip" -d "$RUNNER_TEMP/protoc-29.6"
+            echo "$RUNNER_TEMP/protoc-29.6/bin" >> "$GITHUB_PATH"
+            echo "$RUNNER_TEMP/chiaki-codegen/bin" >> "$GITHUB_PATH"
+            "$CHIAKI_HOST_PYTHON" scripts/release/verify_host_tools.py --python "$CHIAKI_HOST_PYTHON" --protoc "$CHIAKI_HOST_PROTOC"
+          '
+      - name: Check signing success and rejection contracts without credentials
+        run: python3 ios/tests/test_apple_signing.py
+      - name: Manually sign, export locally and verify the IPA
+        env:
+          GR_IOS_CERTIFICATE_P12_BASE64: ${{ secrets.GR_IOS_CERTIFICATE_P12_BASE64 }}
+          GR_IOS_CERTIFICATE_PASSWORD: ${{ secrets.GR_IOS_CERTIFICATE_PASSWORD }}
+          GR_IOS_PROFILE_BASE64: ${{ secrets.GR_IOS_PROFILE_BASE64 }}
+        run: |
+          python3 ios/scripts/sign-and-export.py "$RUNNER_TEMP/gameremote-signed" \
+            --mode "$SIGNING_MODE" --state "$RUNNER_TEMP/gameremote-signing-state.json" --execute-signing
+      - name: Remove temporary signing material and restore keychain search list
+        if: always()
+        run: python3 ios/scripts/sign-and-export.py --cleanup-state "$RUNNER_TEMP/gameremote-signing-state.json"
+      - name: Retain only the validated IPA and minimal report privately
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: GameRemote-iOS-${{ inputs.mode }}-signed
+          path: |
+            ${{ runner.temp }}/gameremote-signed/deliverables/GameRemote.ipa
+            ${{ runner.temp }}/gameremote-signed/deliverables/verification.json
+          if-no-files-found: error
+          retention-days: 7
